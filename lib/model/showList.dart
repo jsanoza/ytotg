@@ -12,9 +12,9 @@ Future<List<DlModel>> fetchEmployeesFromDatabase() async {
 }
 
 class ShowList extends StatefulWidget {
-  final Function() notifyParent;
+  final Function() playlist, recent;
 
-  const ShowList({Key key, this.notifyParent}) : super(key: key);
+  const ShowList({Key key, this.playlist, this.recent}) : super(key: key);
   @override
   _ShowListState createState() => _ShowListState();
 }

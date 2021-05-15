@@ -45,6 +45,8 @@ dependencies:
   flutter_neumorphic: ^3.1.0
   # audio_trim: ^0.0.6
   flutter_ffmpeg: ^0.4.0  
+  rounded_loading_button: ^1.0.0
+  focused_menu: ^1.0.2
   # rubber: ^1.0.0
   # expandable_bottom_bar: ^1.0.2
   # miniplayer: 1.0.0+2

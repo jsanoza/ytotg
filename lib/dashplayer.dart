@@ -18,8 +18,11 @@ import 'package:webview_flutter/webview_flutter.dart';
 import 'package:yt_otg/trialplayeragain.dart';
 import 'downloader.dart';
 import 'dashplaylist.dart';
+import 'model/dbProvider.dart';
+import 'model/downloadModel.dart';
 import 'model/posseek.dart';
 import 'model/showList.dart';
+import 'model/singleAudio.dart';
 import 'model/singleAudio.dart';
 
 class DashPlayer extends StatefulWidget {
@@ -42,6 +45,11 @@ class _DashPlayerState extends State<DashPlayer> with TickerProviderStateMixin {
   bool selected = false;
   String imageplaying;
   Duration nowplaying;
+  String app;
+
+  List<Audio> _string = [];
+
+  set string(List<Audio> value) => setState(() => _string = value);
 
   _miniplayerWidget() {
     return Stack(
@@ -97,6 +105,10 @@ class _DashPlayerState extends State<DashPlayer> with TickerProviderStateMixin {
                     builder: (BuildContext context, Playing playing) {
                       // final myAudio = find(audios, playing.audio.assetAudioPath);
                       if (playing == null) {}
+                      // return Container(
+                      //   height: 50,
+                      //   width: 50,
+                      // );
                       return Container(
                         height: 50,
                         width: 50,
@@ -113,8 +125,14 @@ class _DashPlayerState extends State<DashPlayer> with TickerProviderStateMixin {
                             if (playing == null) {
                               return SizedBox();
                             }
-                            var _list = _assetsAudioPlayer.getCurrentAudioextra.values.toList();
-                            return Image.file(File(_list[0].toString()), fit: BoxFit.cover);
+                            // var _list = _assetsAudioPlayer.getCurrentAudioextra.values.toList();
+                            // return Image.file(File(_list[0].toString()), fit: BoxFit.cover);
+
+                            var _trial = _assetsAudioPlayer.getCurrentAudioAlbum.toString();
+                            return Image.file(
+                              File(app + _trial),
+                              fit: BoxFit.cover,
+                            );
                           },
                         ),
                       );
@@ -397,40 +415,86 @@ class _DashPlayerState extends State<DashPlayer> with TickerProviderStateMixin {
     }
   }
 
-  refresh() async {
-    selected = true;
-    _controller.forward();
-    setState(() {
-      _isLoaded = true;
-      print('narefreshakoa');
-    });
+  playlist() async {
     Directory appDocDir = await getApplicationDocumentsDirectory();
-    var resultpath = appDocDir.uri.toFilePath().toString() + SingleAudio.singlePath;
-    var imagepath = appDocDir.uri.toFilePath().toString() + SingleAudio.image;
+    int indexof;
 
-    _isLoaded = true;
-    var usrMap = {"name": imagepath.toString(), "dummy": 'dummy'};
-    await _assetsAudioPlayer.open(
-      Audio.file(
-        resultpath.toString(),
-        metas: Metas(
-          id: resultpath,
-          extra: usrMap,
-          title: SingleAudio.title,
-          artist: SingleAudio.artist,
-          album: SingleAudio.album,
-          image: MetasImage.asset("assets/images/aa.jpeg"),
+//homepageplaylist
+    if (SingleAudio.fromwhere == 'homepageplaylist') {
+      await _assetsAudioPlayer.open(
+        Playlist(audios: _string, startIndex: 0),
+        showNotification: true,
+        playInBackground: PlayInBackground.enabled,
+        loopMode: LoopMode.playlist,
+      );
+    }
+
+// //playlist
+    if (SingleAudio.fromwhere == 'randomplay') {
+      setState(() {
+        print('imherer2');
+        indexof = _string.indexWhere((element) => element.path == appDocDir.uri.toFilePath().toString() + SingleAudio.singlePath);
+        print(indexof.toString() + "THIS IS THE INDEX");
+      });
+      await _assetsAudioPlayer.open(
+        Playlist(audios: _string, startIndex: indexof),
+        showNotification: true,
+        playInBackground: PlayInBackground.enabled,
+        loopMode: LoopMode.playlist,
+      );
+    }
+
+//allsongs
+    if (SingleAudio.fromwhere == 'playall') {
+      setState(() {
+        print('imherer');
+      });
+      await _assetsAudioPlayer.open(
+        Playlist(audios: _string, startIndex: 0),
+        showNotification: true,
+        playInBackground: PlayInBackground.enabled,
+        loopMode: LoopMode.playlist,
+      );
+      print(_assetsAudioPlayer.getCurrentAudioAlbum.toString());
+    }
+
+// //recently added
+    if (SingleAudio.fromwhere == 'solo') {
+      var resultpath = appDocDir.uri.toFilePath().toString() + SingleAudio.singlePath;
+      await _assetsAudioPlayer.open(
+        Audio.file(
+          resultpath.toString(),
+          metas: Metas(
+            id: resultpath,
+            title: SingleAudio.title,
+            artist: SingleAudio.artist,
+            album: SingleAudio.image,
+            image: MetasImage.asset("assets/images/aa.jpeg"),
+          ),
         ),
-      ),
-      showNotification: true,
-      loopMode: LoopMode.single,
-      playInBackground: PlayInBackground.enabled,
-    );
+        showNotification: true,
+        loopMode: LoopMode.none,
+        playInBackground: PlayInBackground.enabled,
+      );
+    }
+
     SingleAudio.singlePath = '';
     SingleAudio.title = '';
     SingleAudio.artist = '';
     SingleAudio.album = '';
     SingleAudio.image = '';
+    PlaylistAudio.path = [];
+    PlaylistAudio.artist = [];
+    PlaylistAudio.image = [];
+    PlaylistAudio.title = [];
+    SingleAudio.fromwhere = '';
+    setState(() {
+      app = appDocDir.uri.toFilePath().toString();
+      selected = true;
+      _controller.forward();
+      _isLoaded = true;
+      print('narefreshakoa');
+    });
   }
 
   _expandedPlayer() {
@@ -526,11 +590,18 @@ class _DashPlayerState extends State<DashPlayer> with TickerProviderStateMixin {
                                     builder: (BuildContext context, Playing playing) {
                                       // final myAudio = find(audios, playing.audio.assetAudioPath);
                                       if (playing == null) {
-                                        return SizedBox();
+                                        return SizedBox(
+                                          width: 20,
+                                        );
                                       }
-                                      var _list = _assetsAudioPlayer.getCurrentAudioextra.values.toList();
+                                      // return SizedBox(
+                                      //   width: 20,
+                                      // );
+
+                                      // var _list = _assetsAudioPlayer.getCurrentAudioextra.values.toList();
+                                      var _trial = _assetsAudioPlayer.getCurrentAudioAlbum.toString();
                                       return Image.file(
-                                        File(_list[0].toString()),
+                                        File(app + _trial),
                                         fit: BoxFit.cover,
                                       );
                                     },
@@ -824,6 +895,7 @@ class _DashPlayerState extends State<DashPlayer> with TickerProviderStateMixin {
                                             print('pressed');
                                             print(_assetsAudioPlayer.currentLoopMode);
                                             _assetsAudioPlayer.toggleLoop();
+                                            setState(() {});
                                           },
                                           child: loopwidget(),
                                         ),
@@ -906,8 +978,10 @@ class _DashPlayerState extends State<DashPlayer> with TickerProviderStateMixin {
             pageSnapping: true,
             physics: NeverScrollableScrollPhysics(),
             children: <Widget>[
-              DashPlaylist(notifyParent: refresh),
-              ShowList(notifyParent: refresh),
+              DashPlaylist(playlist: playlist, callback: (val) => setState(() => _string = val)),
+              ShowList(
+                playlist: playlist,
+              ),
             ],
             onPageChanged: (page) {
               setState(() {

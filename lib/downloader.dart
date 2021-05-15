@@ -50,79 +50,146 @@ class _PickDLState extends State<PickDL> {
   MemoDbProvider musicDB = MemoDbProvider();
   final FlutterFFmpeg _flutterFFmpeg = new FlutterFFmpeg();
 
-  Future<dynamic> getDetail(String userUrl) async {
-    // Uri.parse('https://swapi.co/api/people')
-    String embedUrl = "https://www.youtube.com/oembed?url=$userUrl&format=json";
-    var res = await http.get(Uri.parse(embedUrl));
-    print("get youtube detail status code: " + res.statusCode.toString());
+  // Future<dynamic> getDetail(String userUrl) async {
+  //   // Uri.parse('https://swapi.co/api/people')
+  //   String embedUrl = "https://www.youtube.com/oembed?url=$userUrl&format=json";
+  //   var res = await http.get(Uri.parse(embedUrl));
+  //   print("get youtube detail status code: " + res.statusCode.toString());
 
-    try {
-      if (res.statusCode == 200) {
-        return json.decode(res.body);
-      } else {
-        return null;
-      }
-    } on FormatException catch (e) {
-      print('invalid JSON' + e.toString());
-      return null;
-    }
-  }
+  //   try {
+  //     if (res.statusCode == 200) {
+  //       return json.decode(res.body);
+  //     } else {
+  //       return null;
+  //     }
+  //   } on FormatException catch (e) {
+  //     print('invalid JSON' + e.toString());
+  //     return null;
+  //   }
+  // }
 
-  _changeurl(String url) async {
-    // url.replaceAll('m.', 'www.');
-    var jsonData;
-    var split = url.substring(10);
-    var finalurl = 'https://www.' + split;
-    if (finalurl.length > 43) {
-      finalurl = finalurl.substring(0, 43);
-      jsonData = await getDetail(finalurl);
-      String title = jsonData['title'];
-      String authorname = jsonData['author_name'];
-      String thumbnail = jsonData['thumbnail_url'];
+  // _changeurl(String url) async {
+  //   // url.replaceAll('m.', 'www.');
+  //   var jsonData;
+  //   var split = url.substring(10);
+  //   var finalurl = 'https://www.' + split;
+  //   if (finalurl.length > 43) {
+  //     finalurl = finalurl.substring(0, 43);
+  //     jsonData = await getDetail(finalurl);
+  //     String title = jsonData['title'];
+  //     String authorname = jsonData['author_name'];
+  //     String thumbnail = jsonData['thumbnail_url'];
 
-      urlList.add(url);
-      titleList.add(title);
-      authorList.add(authorname);
-      thumbList.add(thumbnail);
+  //     urlList.add(url);
+  //     titleList.add(title);
+  //     authorList.add(authorname);
+  //     thumbList.add(thumbnail);
 
-      _urlList.add(url);
-      _titleList.add(title);
-      _authorList.add(authorname);
-      _thumbList.add(thumbnail);
-      // YTList.titleList = titleList;
-      // YTList.urlList = urlList;
-      // YTList.authorList = authorList;
-      // YTList.thumbList = thumbList;
+  //     _urlList.add(url);
+  //     _titleList.add(title);
+  //     _authorList.add(authorname);
+  //     _thumbList.add(thumbnail);
+  //     // YTList.titleList = titleList;
+  //     // YTList.urlList = urlList;
+  //     // YTList.authorList = authorList;
+  //     // YTList.thumbList = thumbList;
 
-      print(title + ' ' + authorname + ' ' + thumbnail);
-    } else {
-      finalurl = finalurl;
-      jsonData = await getDetail(finalurl);
-      String title = jsonData['title'];
-      String authorname = jsonData['author_name'];
-      String thumbnail = jsonData['thumbnail_url'];
+  //     print(title + ' ' + authorname + ' ' + thumbnail);
+  //   } else {
+  //     finalurl = finalurl;
+  //     jsonData = await getDetail(finalurl);
+  //     String title = jsonData['title'];
+  //     String authorname = jsonData['author_name'];
+  //     String thumbnail = jsonData['thumbnail_url'];
 
-      urlList.add(url);
-      titleList.add(title);
-      authorList.add(authorname);
-      thumbList.add(thumbnail);
+  //     urlList.add(url);
+  //     titleList.add(title);
+  //     authorList.add(authorname);
+  //     thumbList.add(thumbnail);
 
-      _urlList.add(url);
-      _titleList.add(title);
-      _authorList.add(authorname);
-      _thumbList.add(thumbnail);
+  //     _urlList.add(url);
+  //     _titleList.add(title);
+  //     _authorList.add(authorname);
+  //     _thumbList.add(thumbnail);
 
-      // YTList.titleList = titleList;
-      // YTList.urlList = urlList;
-      // YTList.authorList = authorList;
-      // YTList.thumbList = thumbList;
+  //     // YTList.titleList = titleList;
+  //     // YTList.urlList = urlList;
+  //     // YTList.authorList = authorList;
+  //     // YTList.thumbList = thumbList;
 
-      print(title + ' ' + authorname + ' ' + thumbnail);
-    }
-  }
+  //     print(title + ' ' + authorname + ' ' + thumbnail);
+  //   }
+  // }
 
-  _bookmarkButton() {
-    var checkiflist;
+  // _bookmarkButton() {
+  //   return FutureBuilder<WebViewController>(
+  //     future: _controller.future,
+  //     builder: (BuildContext context, AsyncSnapshot<WebViewController> controller) {
+  //       if (controller.hasData) {
+  //         return FloatingActionButton(
+  //           splashColor: Colors.white,
+  //           backgroundColor: Color(0xffC06C84),
+  //           onPressed: () async {
+  //             var url = await controller.data.currentUrl();
+  //             // if (url.length > 43) {
+  //             //   print(url.substring(41, 46));
+  //             //   checkiflist = url.substring(41, 46);
+  //             //   if (checkiflist == '&list') {
+  //             //     if (urlList.contains(url)) {
+  //             //       ScaffoldMessenger.of(context).showSnackBar(
+  //             //         SnackBar(
+  //             //           content: Text('Selected video is already on the list.'),
+  //             //         ),
+  //             //       );
+  //             //     } else {
+  //             //       // _changeurl(url);
+  //             //       ScaffoldMessenger.of(context).showSnackBar(
+  //             //         SnackBar(
+  //             //           content: Text('Added to your download list.'),
+  //             //         ),
+  //             //       );
+  //             //     }
+  //             //   } else {
+  //             //     // ScaffoldMessenger.of(context).showSnackBar(
+  //             //     //   SnackBar(
+  //             //     //     content: Text('Please select a video.'),
+  //             //     //   ),
+  //             //     // );
+  //             //   }
+  //             // } else {
+  //             //   if (url.length == 22) {
+  //             //     ScaffoldMessenger.of(context).showSnackBar(
+  //             //       SnackBar(
+  //             //         content: Text('Please select a video.'),
+  //             //       ),
+  //             //     );
+  //             //   } else {
+  //             //     // if (urlList.contains(url)) {
+  //             //     //   ScaffoldMessenger.of(context).showSnackBar(
+  //             //     //     SnackBar(
+  //             //     //       content: Text('Selected video is already on the list.'),
+  //             //     //     ),
+  //             //     //   );
+  //             //     // } else {
+  //             //     //   _changeurl(url);
+  //             //     //   ScaffoldMessenger.of(context).showSnackBar(
+  //             //     //     SnackBar(
+  //             //     //       content: Text('Added to your download list.'),
+  //             //     //     ),
+  //             //     //   );
+  //             //     // }
+  //             //   }
+  //             // }
+  //           },
+  //           child: Icon(Icons.favorite),
+  //         );
+  //       }
+  //       return Container();
+  //     },
+  //   );
+  // }
+
+  _anotherBookmark() {
     return FutureBuilder<WebViewController>(
       future: _controller.future,
       builder: (BuildContext context, AsyncSnapshot<WebViewController> controller) {
@@ -132,54 +199,92 @@ class _PickDLState extends State<PickDL> {
             backgroundColor: Color(0xffC06C84),
             onPressed: () async {
               var url = await controller.data.currentUrl();
-              if (url.length > 43) {
-                print(url.substring(41, 46));
-                checkiflist = url.substring(41, 46);
-                if (checkiflist == '&list') {
-                  if (urlList.contains(url)) {
-                    ScaffoldMessenger.of(context).showSnackBar(
-                      SnackBar(
-                        content: Text('Selected video is already on the list.'),
-                      ),
-                    );
-                  } else {
-                    _changeurl(url);
-                    ScaffoldMessenger.of(context).showSnackBar(
-                      SnackBar(
-                        content: Text('Added to your download list.'),
-                      ),
-                    );
-                  }
-                } else {
+              print(url);
+
+              if (url.length == 22) {
+                ScaffoldMessenger.of(context).showSnackBar(
+                  SnackBar(
+                    content: Text('Empty'),
+                  ),
+                );
+              }
+
+              if (url == 'https://m.youtube.com/channel/UC-9-kyTW8ZkZNDHQJ6FgpwQ') {
+                ScaffoldMessenger.of(context).showSnackBar(
+                  SnackBar(
+                    content: Text('Invalid Video'),
+                  ),
+                );
+              }
+
+              if (url.length == 41) {
+                var yt = YoutubeExplode();
+                var playlist = await yt.videos.get(url);
+                var check = await musicDB.getcount(url.toString());
+
+                if (check.toString() == '1') {
                   ScaffoldMessenger.of(context).showSnackBar(
                     SnackBar(
-                      content: Text('Please select a video.'),
-                    ),
-                  );
-                }
-              } else {
-                if (url.length == 22) {
-                  ScaffoldMessenger.of(context).showSnackBar(
-                    SnackBar(
-                      content: Text('Please select a video.'),
+                      content: Text('Video is already downloaded on this phone.'),
                     ),
                   );
                 } else {
-                  if (urlList.contains(url)) {
+                  urlList.add(playlist.url);
+                  titleList.add(playlist.title);
+                  authorList.add(playlist.author);
+                  thumbList.add(playlist.thumbnails.highResUrl);
+
+                  _urlList.add(playlist.url);
+                  _titleList.add(playlist.title);
+                  _authorList.add(playlist.author);
+                  _thumbList.add(playlist.thumbnails.highResUrl);
+
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    SnackBar(
+                      content: Text('Video added to download list.'),
+                    ),
+                  );
+                }
+              }
+
+              if (url.length >= 70) {
+                var yt = YoutubeExplode();
+                var playlist = await yt.playlists.get(url);
+
+                await for (var video in yt.playlists.getVideos(playlist.id)) {
+                  var videoTitle = video.title;
+                  var videoAuthor = video.author;
+                  var videoUrl = video.url;
+                  var videoThumbnail = video.thumbnails.highResUrl;
+                  var check = await musicDB.getcount(videoUrl.toString());
+
+                  if (check.toString() == '1') {
+                    print(videoUrl.toString());
                     ScaffoldMessenger.of(context).showSnackBar(
                       SnackBar(
-                        content: Text('Selected video is already on the list.'),
+                        content: Text('$videoTitle is already downloaded on this phone. Therefore deleting it on the download list.'),
                       ),
                     );
                   } else {
-                    _changeurl(url);
-                    ScaffoldMessenger.of(context).showSnackBar(
-                      SnackBar(
-                        content: Text('Added to your download list.'),
-                      ),
-                    );
+                    if (urlList.contains(videoUrl)) {
+                    } else {
+                      urlList.add(videoUrl);
+                      titleList.add(videoTitle);
+                      authorList.add(videoAuthor);
+                      thumbList.add(videoThumbnail);
+
+                      _urlList.add(videoUrl);
+                      _titleList.add(videoTitle);
+                      _authorList.add(videoAuthor);
+                      _thumbList.add(videoThumbnail);
+                    }
                   }
                 }
+                ScaffoldMessenger.of(context).showSnackBar(
+                  SnackBar(
+                    content: Text('Videos added to download list.'),
+                  ),
+                );
               }
             },
             child: Icon(Icons.favorite),
@@ -189,6 +294,17 @@ class _PickDLState extends State<PickDL> {
       },
     );
   }
+
+  // checkmesenpai() async {
+  //   var check = await musicDB.getcount('https://m.youtube.com/watch?v=tQ0yjYUFKAE');
+  //   print("THIS IS IT WE FOUND IT OUR MISSION IS DONE" + check.toString());
+  //   // for (var i = 0; i < urlList.length; i++) {
+  //   //   var check = await musicDB.getcount(urlList[i].toString());
+  //   //   if (check.toString() == '1') {
+  //   //     print("THIS IS IT WE FOUND IT OUR MISSION IS DONE" + urlList[i].toString());
+  //   //   }
+  //   // }
+  // }
 
   Future<void> deleteFile(File file) async {
     try {
@@ -212,7 +328,6 @@ class _PickDLState extends State<PickDL> {
       });
       var yt = YoutubeExplode();
       var id = VideoId(urlList[i]);
-      var video = await yt.videos.get(id);
       _isDownloading = true;
       await Permission.storage.request();
       var manifest = await yt.videos.streamsClient.getManifest(id);
@@ -456,12 +571,13 @@ class _PickDLState extends State<PickDL> {
               Padding(
                 padding: const EdgeInsets.only(
                   top: 100.0,
+                  bottom: 60,
                 ),
                 child: _isDownloading
                     ? ListView(
                         children: [
                           Padding(
-                            padding: const EdgeInsets.only(left: 5.0, right: 5.0, top: 0.0),
+                            padding: const EdgeInsets.only(left: 5.0, right: 5.0, bottom: 50.0),
                             child: Container(
                               height: Get.height,
                               width: Get.width,
@@ -862,7 +978,7 @@ class _PickDLState extends State<PickDL> {
                       height: Get.height,
                       width: Get.width,
                       child: WebView(
-                        initialUrl: 'https://www.youtube.com',
+                        initialUrl: 'https://www.youtube.com/channel/UC-9-kyTW8ZkZNDHQJ6FgpwQ',
                         javascriptMode: JavascriptMode.unrestricted,
                         onWebViewCreated: (WebViewController webViewController) {
                           _controller.complete(webViewController);
@@ -877,7 +993,7 @@ class _PickDLState extends State<PickDL> {
         ),
         floatingActionButton: Padding(
           padding: const EdgeInsets.only(left: 28.0, bottom: 40),
-          child: _bookmarkButton(),
+          child: _anotherBookmark(),
         ),
         bottomNavigationBar: Padding(
           padding: const EdgeInsets.only(top: 0.0, bottom: 0),

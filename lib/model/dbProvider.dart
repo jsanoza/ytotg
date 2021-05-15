@@ -8,9 +8,8 @@ import 'downloadModel.dart';
 
 class MemoDbProvider {
   Future<Database> init() async {
-    Directory directory =
-        await getApplicationDocumentsDirectory(); //returns a directory which stores permanent files
-    final path = join(directory.path, "hello.db"); //create path to database
+    Directory directory = await getApplicationDocumentsDirectory(); //returns a directory which stores permanent files
+    final path = join(directory.path, "ggsir.db"); //create path to database
 
     return await openDatabase(
         //open the database or create a database if there isn't any
@@ -24,7 +23,57 @@ class MemoDbProvider {
           authornameList TEXT,
           thumbnailList TEXT,
           pathList TEXT)""");
+      await db.execute("""
+          CREATE TABLE Playlist(
+          id INTEGER PRIMARY KEY AUTOINCREMENT,
+          playlistName TEXT)""");
+      await db.execute("""
+          CREATE TABLE pathPlaylist(
+          id INTEGER PRIMARY KEY AUTOINCREMENT,
+          playlistName TEXT,
+          songspathList TEXT,
+          thumbnailList TEXT,
+          indexinPlaylist INT)""");
     });
+  }
+
+  Future<int> listTables() async {
+    final db = await init();
+    final tables = await db.rawQuery('SELECT * FROM sqlite_master ORDER BY name;');
+    print(tables);
+
+    (await db.query('sqlite_master', columns: ['type', 'name'])).forEach((row) {
+      print(row.values);
+    });
+  }
+
+  // Future<String> lastIndex(id) async {
+  //   final db = await init();
+  //   // select * from <TABLE> where row_id = (select max(row_id) from <TABLE>);
+  //   final lastIndexs = await db.rawQuery("SELECT indexinPlaylist from pathPlaylist WHERE playlistName = \'$id'");
+  //   print(lastIndexs.length);
+
+  //   lastIndexs.forEach((element) {
+  //     element.
+  //   })
+  //   return lastIndexs.toString();
+  // }
+
+  Future<int> addtoPlaylist(AddPlaylistModel item) async {
+    final db = await init();
+    return db.insert(
+      "pathPlaylist",
+      item.toMap(),
+      conflictAlgorithm: ConflictAlgorithm.ignore,
+    );
+  }
+
+  Future<int> updatePlaylist(oldIndex, newIndex, playlistName, songspathList) async {
+    final db = await init();
+    await db.delete("pathPlaylist", //table name
+        where: "songspathList = ? AND playlistName = ?",
+        whereArgs: [songspathList, playlistName] // use whereArgs to avoid SQL injection
+        );
   }
 
   Future<int> addItem(DlModel item) async {
@@ -32,64 +81,120 @@ class MemoDbProvider {
     final db = await init(); //open database
     return db.insert(
       "Music", item.toMap(), //toMap() function from MemoModel
-      conflictAlgorithm:
-          ConflictAlgorithm.ignore, //ignores conflicts due to duplicate entries
+      conflictAlgorithm: ConflictAlgorithm.ignore, //ignores conflicts due to duplicate entries
     );
   }
 
-  // Future<List<DlModel>> fetchMemos() async {
-  //   //returns the memos as a list (array)
-  //   final db = await init();
-  //   final maps = await db
-  //       .query("Music"); //query all the rows in a table as an array of maps
+  Future<int> addItem2(DlModel item) async {
+    //returns number of items inserted as an integer
+    final db = await init(); //open database
+    return db.insert(
+      "Music", item.toMap(), //toMap() function from MemoModel
+      conflictAlgorithm: ConflictAlgorithm.replace, //ignores conflicts due to duplicate entries
+    );
+  }
 
-  //   return List.generate(maps.length, (i) {
-  //     //create a list of memos
-  //     return DlModel(
-     
-  //       maps[i]['urlList'],
-  //       maps[i]['titleList'],
-  //       maps[i]['authornameList'],
-  //       maps[i]['thumbnailList'],
-  //       maps[i]['pathList'],
-  //     );
-  //   });
-  // }
+  Future<int> addPlaylist(PlaylistModel name) async {
+    final db = await init();
+    return db.insert(
+      "Playlist",
+      name.toMap(),
+      conflictAlgorithm: ConflictAlgorithm.ignore,
+    );
+  }
 
+  Future<int> existSonginPlaylist(pathList, playlistName) async {
+    var db = await init();
+    int count = Sqflite.firstIntValue(await db.rawQuery("SELECT COUNT(*) FROM pathPlaylist WHERE songspathList = \'$pathList' AND playlistName = \'$playlistName'"));
+    return count;
+  }
+
+  Future<int> existPlaylist(id) async {
+    var db = await init();
+    int count = Sqflite.firstIntValue(await db.rawQuery("SELECT COUNT(*) FROM Playlist WHERE playlistName = \'$id'"));
+    return count;
+  }
+
+  Future<List<AddPlaylistModel>> getSongsPlaylist(playlistName1) async {
+    var db = await init();
+    List<Map> list = await db.rawQuery("SELECT * FROM pathPlaylist WHERE playlistName = \'$playlistName1'");
+    // ignore: deprecated_member_use
+    List<AddPlaylistModel> playsongs = new List();
+    for (int i = 0; i < list.length; i++) {
+      playsongs.add(new AddPlaylistModel(
+        list[i]["playlistName"],
+        list[i]["songspathList"],
+        list[i]["thumbnailList"],
+        list[i]["indexinPlaylist"],
+      ));
+    }
+    // print(playsongs.length);
+    return playsongs;
+  }
+
+  Future<List<DlModel>> getSongsPlaylistInfo(path) async {
+    var db = await init();
+    List<Map> list = await db.rawQuery("SELECT * FROM Music WHERE pathList = \'$path'");
+    // ignore: deprecated_member_use
+    List<DlModel> info = new List();
+    for (int i = 0; i < list.length; i++) {
+      info.add(new DlModel(
+        list[i]["urlList"],
+        list[i]["titleList"],
+        list[i]["authornameList"],
+        list[i]["thumbnailList"],
+        list[i]["pathList"],
+      ));
+    }
+    print(info.length);
+    return info;
+  }
+
+  Future<List<PlaylistModel>> getPlaylist() async {
+    var db = await init();
+    List<Map> list = await db.rawQuery('SELECT * FROM Playlist');
+    // ignore: deprecated_member_use
+    List<PlaylistModel> playlist = new List();
+    for (int i = 0; i < list.length; i++) {
+      playlist.add(new PlaylistModel(list[i]['playlistName']));
+    }
+    print(playlist.length);
+    return playlist;
+  }
 
   Future<List<DlModel>> getEmployees() async {
-    var dbClient = await init();
-    List<Map> list = await dbClient.rawQuery('SELECT * FROM Music');
+    var db = await init();
+    List<Map> list = await db.rawQuery('SELECT * FROM Music');
     // ignore: deprecated_member_use
     List<DlModel> employees = new List();
     for (int i = 0; i < list.length; i++) {
-      employees.add(
-        new DlModel(
-        
-          list[i]["urlList"], 
-          list[i]["titleList"], 
-          list[i]["authornameList"],
-          list[i]["thumbnailList"],
-          list[i]["pathList"]));
+      employees.add(new DlModel(
+        list[i]["urlList"],
+        list[i]["titleList"],
+        list[i]["authornameList"],
+        list[i]["thumbnailList"],
+        list[i]["pathList"],
+      ));
     }
     print(employees.length);
     return employees;
   }
 
+  Future<int> getcount(id) async {
+    var dbclient = await init();
+    int count = Sqflite.firstIntValue(await dbclient.rawQuery("SELECT COUNT(*) FROM Music WHERE urlList=\'$id\'"));
+    return count;
+  }
 
-  Future<int> deleteMemo(String pathList) async{ //returns number of items deleted
+  Future<int> deleteMemo(String pathList) async {
+    //returns number of items deleted
     final db = await init();
-  
-    int result = await db.delete(
-      "Music", //table name
-      where: "pathList = ?",
-      whereArgs: [pathList] // use whereArgs to avoid SQL injection
-    );
+
+    int result = await db.delete("Music", //table name
+        where: "pathList = ?",
+        whereArgs: [pathList] // use whereArgs to avoid SQL injection
+        );
 
     return result;
   }
-
-
-
 }
- 
