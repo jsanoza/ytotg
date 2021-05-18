@@ -33,6 +33,7 @@ class MemoDbProvider {
           playlistName TEXT,
           songspathList TEXT,
           thumbnailList TEXT,
+          titleList TEXT,
           indexinPlaylist INT)""");
     });
   }
@@ -126,6 +127,7 @@ class MemoDbProvider {
         list[i]["songspathList"],
         list[i]["thumbnailList"],
         list[i]["indexinPlaylist"],
+        list[i]['titleList'],
       ));
     }
     // print(playsongs.length);
@@ -193,8 +195,40 @@ class MemoDbProvider {
     int result = await db.delete("Music", //table name
         where: "pathList = ?",
         whereArgs: [pathList] // use whereArgs to avoid SQL injection
-        );
+        ).then(
+      (value) async {
+        await db.delete("pathPlaylist", where: "songspathList = ?", whereArgs: [pathList]);
+        return;
+      },
+    );
 
     return result;
+  }
+
+  Future<int> deletePlaylist(String playlistName) async {
+    final db = await init();
+    int result = await db.delete("Playlist", where: "playlistName = ? ", whereArgs: [playlistName]).then((value) async {
+      await db.delete("pathPlaylist", where: "playlistName = ?", whereArgs: [playlistName]);
+      return;
+    });
+    return result;
+  }
+
+  Future<int> updatePlaylistName(String playlistName, String newName) async {
+    final db = await init();
+    await db.rawUpdate("UPDATE Playlist SET playlistName = ? WHERE playlistName = ?", [newName, playlistName]).then((value) async {
+      await db.rawUpdate("UPDATE pathPlaylist SET playlistName = ? WHERE playlistName = ?", [newName, playlistName]);
+      return null;
+    });
+    print('check');
+    // return result;
+  }
+
+  Future<int> deleteFromPlaylist(String playlistName, String indexinPlaylist, String songspathList) async {
+    final db = await init();
+    await db.delete("pathPlaylist", where: "indexinPlaylist = ? AND songspathList = ? AND playlistName = ?", whereArgs: [indexinPlaylist, songspathList, playlistName]).then((value) async {
+      print("OKAY");
+      return null;
+    });
   }
 }

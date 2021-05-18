@@ -34,7 +34,7 @@ dependencies:
   path_provider: 
   permission_handler: ^5.0.1
   html_unescape: ^1.0.2
-  assets_audio_player: ^3.0.3
+  assets_audio_player: ^3.0.3+3
   marquee: ^1.7.0
   draggable_bottom_sheet: ^0.1.2
   cool_nav: ^0.0.3
@@ -50,6 +50,10 @@ dependencies:
   # rubber: ^1.0.0
   # expandable_bottom_bar: ^1.0.2
   # miniplayer: 1.0.0+2
+  palette_generator: ^0.3.0
+  # finite_coverflow: ^1.0.0
+  carousel_slider: ^3.0.0
+  flip_card: ^0.5.0
   
 
 dev_dependencies:

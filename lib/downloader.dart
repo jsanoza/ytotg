@@ -287,7 +287,7 @@ class _PickDLState extends State<PickDL> {
                 );
               }
             },
-            child: Icon(Icons.favorite),
+            child: Icon(Icons.favorite, color: Colors.white),
           );
         }
         return Container();
@@ -333,8 +333,8 @@ class _PickDLState extends State<PickDL> {
       var manifest = await yt.videos.streamsClient.getManifest(id);
       var audio = manifest.audioOnly.last;
       Directory appDocDir = await getApplicationDocumentsDirectory();
-      var tempTitle = '${titleList[i]}'.replaceAll(r'\', '').replaceAll('/', '').replaceAll('*', '').replaceAll('?', '').replaceAll('"', '').replaceAll('<', '').replaceAll('>', '').replaceAll('|', '');
-      var tempPath = '${titleList[i]}.${audio.container.name}'.replaceAll(r'\', '').replaceAll('/', '').replaceAll('*', '').replaceAll('?', '').replaceAll('"', '').replaceAll('<', '').replaceAll('>', '').replaceAll('|', '');
+      var tempTitle = '${titleList[i]}'.replaceAll(r'\', '').replaceAll('/', '').replaceAll('*', '').replaceAll('?', '').replaceAll('"', '').replaceAll('<', '').replaceAll('>', '').replaceAll('|', '').replaceAll('{', '').replaceAll('}', '').replaceAll('\'', '');
+      var tempPath = '${titleList[i]}.${audio.container.name}'.replaceAll(r'\', '').replaceAll('/', '').replaceAll('*', '').replaceAll('?', '').replaceAll('"', '').replaceAll('<', '').replaceAll('>', '').replaceAll('|', '').replaceAll('{', '').replaceAll('}', '').replaceAll('\'', '');
       var filePath = path.join(appDocDir.uri.toFilePath(), tempPath);
 
       print(filePath.toString());
@@ -366,10 +366,10 @@ class _PickDLState extends State<PickDL> {
 
         final memo = DlModel(
           urlList[i],
-          titleList[i],
-          authorList[i],
+          titleList[i].replaceAll(r'\', '').replaceAll('/', '').replaceAll('*', '').replaceAll('?', '').replaceAll('"', '').replaceAll('<', '').replaceAll('>', '').replaceAll('|', '').replaceAll('{', '').replaceAll('}', '').replaceAll('\'', ''),
+          authorList[i].replaceAll(r'\', '').replaceAll('/', '').replaceAll('*', '').replaceAll('?', '').replaceAll('"', '').replaceAll('<', '').replaceAll('>', '').replaceAll('|', '').replaceAll('{', '').replaceAll('}', '').replaceAll('\'', ''),
           '$split.jpg',
-          '${tempTitle}1.mp4',
+          '${tempTitle}1.mp4'.replaceAll(r'\', '').replaceAll('/', '').replaceAll('*', '').replaceAll('?', '').replaceAll('"', '').replaceAll('<', '').replaceAll('>', '').replaceAll('|', '').replaceAll('{', '').replaceAll('}', '').replaceAll('\'', ''),
         );
         await musicDB.addItem(memo);
 
@@ -487,57 +487,63 @@ class _PickDLState extends State<PickDL> {
                                         backgroundColor: Colors.white,
                                       ),
                                     ),
-                                    IconButton(
-                                      icon: Icon(
-                                        Icons.download_sharp,
-                                        size: 20,
-                                        color: Colors.white,
-                                      ),
-                                      onPressed: () {
-                                        print("CLICKED DOWNLOAD");
-                                        // _downloadFunc();
-                                      },
-                                    ),
+                                    // IconButton(
+                                    //   icon: Icon(
+                                    //     Icons.download_sharp,
+                                    //     size: 20,
+                                    //     color: Colors.white,
+                                    //   ),
+                                    //   onPressed: () {
+                                    //     print("CLICKED DOWNLOAD");
+                                    //     // _downloadFunc();
+                                    //   },
+                                    // ),
+                                    Center(child: Icon(Icons.download_sharp, color: Colors.white)),
                                   ],
                                 ),
                               )
-                            : Container(
-                                height: 40,
-                                width: 40,
-                                decoration: BoxDecoration(
-                                  shape: BoxShape.rectangle,
-                                  border: Border.all(color: Colors.white),
-                                  borderRadius: BorderRadius.all(Radius.circular(90)),
-                                  color: Colors.transparent,
-                                  // boxShadow: [BoxShadow(color: Colors.black.withOpacity(.2), blurRadius: 10, spreadRadius: 5)],
-                                ),
-                                child: IconButton(
-                                  icon: Icon(
-                                    Icons.download_sharp,
-                                    size: 20,
-                                    color: Colors.white,
+                            : GestureDetector(
+                                onTap: () {
+                                  if (titleList.length != 0) {
+                                    _downloadFunc();
+                                    indexNow = 0;
+                                  } else {
+                                    showDialog(
+                                      context: context,
+                                      builder: (context) {
+                                        return AlertDialog(
+                                          content: Text('Download list is empty.'),
+                                        );
+                                      },
+                                    );
+                                  }
+                                },
+                                child: Container(
+                                  height: 40,
+                                  width: 40,
+                                  decoration: BoxDecoration(
+                                    shape: BoxShape.rectangle,
+                                    border: Border.all(color: Colors.white),
+                                    borderRadius: BorderRadius.all(Radius.circular(90)),
+                                    color: Colors.transparent,
+                                    // boxShadow: [BoxShadow(color: Colors.black.withOpacity(.2), blurRadius: 10, spreadRadius: 5)],
                                   ),
-                                  onPressed: () async {
-                                    print("CLICKED DOWNLOAD");
-                                    if (titleList.length != 0) {
-                                      _downloadFunc();
-                                      indexNow = 0;
-                                    } else {
-                                      showDialog(
-                                        context: context,
-                                        builder: (context) {
-                                          return AlertDialog(
-                                            content: Text('Download list is empty.'),
-                                          );
-                                        },
-                                      );
-                                    }
+                                  // child: IconButton(
+                                  //   icon: Icon(
+                                  //     Icons.download_sharp,
+                                  //     size: 20,
+                                  //     color: Colors.white,
+                                  //   ),
+                                  //   onPressed: () async {
+                                  //     print("CLICKED DOWNLOAD");
 
-                                    // setState(() {
-                                    //   _isDownloading = true;
-                                    // });
-                                    // _trySet();
-                                  },
+                                  //     // setState(() {
+                                  //     //   _isDownloading = true;
+                                  //     // });
+                                  //     // _trySet();
+                                  //   },
+                                  // ),
+                                  child: Icon(Icons.download_sharp, color: Colors.white),
                                 ),
                               ),
                         // : Container(
@@ -882,50 +888,74 @@ class _PickDLState extends State<PickDL> {
                                     ),
                                   ),
                                 ),
-                                Container(
-                                  height: 40,
-                                  width: 40,
-                                  child: Stack(
-                                    children: [
-                                      Container(
-                                        height: 40,
-                                        width: 40,
-                                        decoration: BoxDecoration(
-                                          shape: BoxShape.rectangle,
-                                          border: Border.all(color: Colors.white),
-                                          borderRadius: BorderRadius.all(Radius.circular(90)),
-                                          color: Colors.transparent,
-                                          // boxShadow: [BoxShadow(color: Colors.black.withOpacity(.2), blurRadius: 10, spreadRadius: 5)],
+                                GestureDetector(
+                                  onTap: () {
+                                    print("CLICKED DOWNLOAD");
+                                    // _downloadFunc();
+                                    showGeneralDialog(
+                                      barrierLabel: "Label",
+                                      barrierDismissible: false,
+                                      barrierColor: Colors.black.withOpacity(0.2),
+                                      transitionDuration: Duration(milliseconds: 200),
+                                      context: context,
+                                      pageBuilder: (context, anim1, anim2) {
+                                        return _downloadList();
+                                      },
+                                      transitionBuilder: (context, anim1, anim2, child) {
+                                        return SlideTransition(
+                                          position: Tween(begin: Offset(0, 1), end: Offset(0, 0)).animate(anim1),
+                                          child: child,
+                                        );
+                                      },
+                                    );
+                                  },
+                                  child: Container(
+                                    height: 40,
+                                    width: 40,
+                                    child: Stack(
+                                      children: [
+                                        Container(
+                                          height: 40,
+                                          width: 40,
+                                          decoration: BoxDecoration(
+                                            shape: BoxShape.rectangle,
+                                            border: Border.all(color: Colors.white),
+                                            borderRadius: BorderRadius.all(Radius.circular(90)),
+                                            color: Colors.transparent,
+                                            // boxShadow: [BoxShadow(color: Colors.black.withOpacity(.2), blurRadius: 10, spreadRadius: 5)],
+                                          ),
                                         ),
-                                      ),
-                                      IconButton(
-                                        icon: Icon(
-                                          Icons.archive,
-                                          size: 20,
-                                          color: Colors.white,
-                                        ),
-                                        onPressed: () {
-                                          print("CLICKED DOWNLOAD");
-                                          // _downloadFunc();
-                                          showGeneralDialog(
-                                            barrierLabel: "Label",
-                                            barrierDismissible: false,
-                                            barrierColor: Colors.black.withOpacity(0.2),
-                                            transitionDuration: Duration(milliseconds: 200),
-                                            context: context,
-                                            pageBuilder: (context, anim1, anim2) {
-                                              return _downloadList();
-                                            },
-                                            transitionBuilder: (context, anim1, anim2, child) {
-                                              return SlideTransition(
-                                                position: Tween(begin: Offset(0, 1), end: Offset(0, 0)).animate(anim1),
-                                                child: child,
-                                              );
-                                            },
-                                          );
-                                        },
-                                      ),
-                                    ],
+
+                                        Center(child: Icon(Icons.archive, color: Colors.white)),
+                                        // IconButton(
+                                        //   icon: Icon(
+                                        //     Icons.archive,
+                                        //     size: 20,
+                                        //     color: Colors.white,
+                                        //   ),
+                                        //   onPressed: () {
+                                        //     print("CLICKED DOWNLOAD");
+                                        //     // _downloadFunc();
+                                        //     showGeneralDialog(
+                                        //       barrierLabel: "Label",
+                                        //       barrierDismissible: false,
+                                        //       barrierColor: Colors.black.withOpacity(0.2),
+                                        //       transitionDuration: Duration(milliseconds: 200),
+                                        //       context: context,
+                                        //       pageBuilder: (context, anim1, anim2) {
+                                        //         return _downloadList();
+                                        //       },
+                                        //       transitionBuilder: (context, anim1, anim2, child) {
+                                        //         return SlideTransition(
+                                        //           position: Tween(begin: Offset(0, 1), end: Offset(0, 0)).animate(anim1),
+                                        //           child: child,
+                                        //         );
+                                        //       },
+                                        //     );
+                                        //   },
+                                        // ),
+                                      ],
+                                    ),
                                   ),
                                 ),
 

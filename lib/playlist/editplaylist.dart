@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
+import 'package:focused_menu/focused_menu.dart';
 import 'package:get/get.dart';
 
 import 'package:google_fonts/google_fonts.dart';
@@ -30,8 +31,9 @@ Future<List<DlModel>> getSongs() async {
 
 class ScreenTwo extends StatefulWidget {
   final String playlistName;
+  final Function check;
 
-  const ScreenTwo({Key key, this.playlistName}) : super(key: key);
+  const ScreenTwo({Key key, this.playlistName, this.check}) : super(key: key);
 
   @override
   _ScreenTwoState createState() => _ScreenTwoState();
@@ -41,6 +43,7 @@ class _ScreenTwoState extends State<ScreenTwo> {
   Directory appDocDir;
   var dbHelper = MemoDbProvider();
   Future<List<AddPlaylistModel>> _myThumbs;
+  TextEditingController _playlistTextController;
   // Future<List<DlModel>> _mySongs;
   // ignore: deprecated_member_use
   List<AddPlaylistModel> myList = List<AddPlaylistModel>();
@@ -83,6 +86,7 @@ class _ScreenTwoState extends State<ScreenTwo> {
         element.songspathList,
         element.thumbnailList,
         element.indexinPlaylist,
+        element.titleList,
       );
       await dbHelper.addtoPlaylist(hellothere).then((value) {
         print('Updated!');
@@ -99,9 +103,15 @@ class _ScreenTwoState extends State<ScreenTwo> {
     setState(() {});
   }
 
+  refresh() async {
+    _allfunctions();
+    print('narefreshba?');
+  }
+
   @override
   void initState() {
     _allfunctions();
+    _playlistTextController = TextEditingController();
     // TODO: implement initState
     super.initState();
   }
@@ -157,7 +167,7 @@ class _ScreenTwoState extends State<ScreenTwo> {
                                           fontSize: 25,
                                         ),
                                         // maxLength: 15,
-                                        // controller: _playlistTextController,
+                                        controller: _playlistTextController,
                                         decoration: InputDecoration(
                                           counterText: '',
                                           isDense: true,
@@ -194,8 +204,31 @@ class _ScreenTwoState extends State<ScreenTwo> {
                                   mainAxisAlignment: MainAxisAlignment.end,
                                   children: [
                                     GestureDetector(
-                                      onTap: () {
+                                      onTap: () async {
                                         print('clicked');
+                                        // await dbHelper.addtoPlaylist(widget).then((value) {
+                                        //   print('Updated!');
+                                        // });
+                                        await dbHelper.updatePlaylistName(widget.playlistName, _playlistTextController.text).then((value) {
+                                          print('Updated!');
+                                          // return null;
+                                        }).then((value) {
+                                          showDialog(
+                                              context: context,
+                                              builder: (context) {
+                                                return AlertDialog(
+                                                  content: Text('Playlist name changed!'),
+                                                );
+                                              }).then((value) {
+                                            Get.back();
+                                            widget.check();
+                                            // widget.check();
+                                          });
+
+                                          return null;
+                                        });
+
+                                        widget.check();
                                       },
                                       child: Container(
                                         height: 50,
@@ -224,7 +257,7 @@ class _ScreenTwoState extends State<ScreenTwo> {
                         children: [
                           Center(
                             child: Container(
-                              height: 250,
+                              height: 220,
                               width: 200,
                               child: FutureBuilder<List<AddPlaylistModel>>(
                                 future: _myThumbs,
@@ -245,7 +278,7 @@ class _ScreenTwoState extends State<ScreenTwo> {
                                           ),
                                           child: Image.file(
                                             File(
-                                              appDocDir.uri.toFilePath().toString() + snapshotx.data[snapshotx.data.length - index - 1].thumbnailList.toString(),
+                                              appDocDir.uri.toFilePath().toString() + snapshotx.data[index].thumbnailList.toString(),
                                             ),
                                             fit: BoxFit.cover,
                                           ),
@@ -262,114 +295,125 @@ class _ScreenTwoState extends State<ScreenTwo> {
                       ),
                     ),
                     Padding(
-                      padding: const EdgeInsets.only(top: 350.0),
+                      padding: const EdgeInsets.only(top: 370.0, bottom: 20),
                       child: Container(
-                        // color: Colors.white,
-                        // decoration: BoxDecoration(
-                        //   gradient: new LinearGradient(
-                        //       colors: [
-                        //         Color(0xffC06C84),
-                        //         Color(0xff355C7D),
-                        //         Color(0xff6C5B7B),
-                        //       ],
-                        //       begin: const FractionalOffset(0.0, 0.0),
-                        //       end: const FractionalOffset(1.0, 1.0),
-                        //       stops: [0.0, 1.0, 1.0],
-                        //       tileMode: TileMode.clamp),
-                        // ),
-                        height: 300,
-                        child: ListView(
-                          children: [
-                            SizedBox(
-                              height: Get.height,
-                              child: FutureBuilder<List<AddPlaylistModel>>(
-                                  future: _myThumbs,
-                                  builder: (context, snapshot) {
-                                    if (snapshot.hasData) {
-                                      myList = snapshot.data;
-                                      _titles = snapshot.data;
-                                      return Theme(
-                                        data: ThemeData(canvasColor: Colors.transparent),
-                                        child: ReorderableListView(
-                                          onReorder: _onReorder,
-                                          children: List.generate(snapshot.data.length, (index) {
-                                            return ListTile(
-                                              key: Key('$index'),
-                                              // title: Text(snapshot.data[index].songspathList.toString()),
-                                              // subtitle: Text(snapshot.data[index].indexinPlaylist.toString()),
-                                              leading: CircleAvatar(
-                                                backgroundColor: Colors.black,
-                                                child: ClipRRect(
-                                                  borderRadius: BorderRadius.circular(75.0),
-                                                  child: Image.file(
-                                                    File(
-                                                      appDocDir.uri.toFilePath().toString() + snapshot.data[index].thumbnailList.toString(),
-                                                    ),
-                                                    fit: BoxFit.fill,
-                                                  ),
-                                                ),
+                        height: Get.height,
+                        width: Get.width,
+                        child: Container(
+                          height: Get.height,
+                          width: Get.width,
+                          child: FutureBuilder<List<AddPlaylistModel>>(
+                              future: _myThumbs,
+                              builder: (context, snapshot) {
+                                if (snapshot.hasData) {
+                                  myList = snapshot.data;
+                                  _titles = snapshot.data;
+                                  return Theme(
+                                    data: ThemeData(canvasColor: Colors.transparent, accentColor: Colors.white),
+                                    child: ReorderableListView(
+                                      onReorder: _onReorder,
+                                      children: List.generate(snapshot.data.length, (index) {
+                                        return Dismissible(
+                                          key: UniqueKey(),
+                                          background: Container(
+                                            color: Colors.red,
+                                            child: Padding(
+                                              padding: const EdgeInsets.all(15),
+                                              child: Row(
+                                                children: [
+                                                  Icon(Icons.delete, color: Colors.white),
+                                                  Text('Remove from list', style: TextStyle(color: Colors.white)),
+                                                ],
                                               ),
-                                              title: AutoSizeText(
+                                            ),
+                                          ),
+                                          onDismissed: (DismissDirection direction) async {
+                                            if (direction == DismissDirection.startToEnd) {
+                                              await dbHelper.deleteFromPlaylist(
+                                                widget.playlistName,
+                                                snapshot.data[index].indexinPlaylist.toString(),
                                                 snapshot.data[index].songspathList.toString(),
-                                                maxLines: 1,
-                                                maxFontSize: 14,
-                                                minFontSize: 14,
-                                                overflow: TextOverflow.ellipsis,
-                                                style: GoogleFonts.poppins(
-                                                  fontWeight: FontWeight.w500,
-                                                  color: Colors.white,
+                                              );
+                                              showDialog(
+                                                  context: context,
+                                                  builder: (context) {
+                                                    return AlertDialog(
+                                                      content: Text(
+                                                        'Track removed!',
+                                                        style: GoogleFonts.poppins(
+                                                          fontWeight: FontWeight.w500,
+                                                        ),
+                                                      ),
+                                                    );
+                                                  });
+                                              // myList.removeAt(index);
+                                            } else {
+                                              await dbHelper.deleteFromPlaylist(
+                                                widget.playlistName,
+                                                snapshot.data[index].indexinPlaylist.toString(),
+                                                snapshot.data[index].songspathList.toString(),
+                                              );
+                                              showDialog(
+                                                  context: context,
+                                                  builder: (context) {
+                                                    return AlertDialog(
+                                                      content: Text(
+                                                        'Track removed!',
+                                                        style: GoogleFonts.poppins(
+                                                          fontWeight: FontWeight.w500,
+                                                        ),
+                                                      ),
+                                                    );
+                                                  });
+                                              // myList.removeAt(index);
+                                            }
+                                          },
+                                          child: ListTile(
+                                            tileColor: Colors.white.withOpacity(0.2),
+                                            contentPadding: EdgeInsets.all(8),
+                                            // minVerticalPadding: 15,
+                                            // horizontalTitleGap: ,
+                                            key: UniqueKey(),
+                                            // title: Text(snapshot.data[index].songspathList.toString()),
+                                            // subtitle: Text(snapshot.data[index].indexinPlaylist.toString()),
+                                            leading: CircleAvatar(
+                                              backgroundColor: Colors.black,
+                                              child: ClipRRect(
+                                                borderRadius: BorderRadius.circular(75.0),
+                                                child: Image.file(
+                                                  File(
+                                                    appDocDir.uri.toFilePath().toString() + snapshot.data[index].thumbnailList.toString(),
+                                                  ),
+                                                  fit: BoxFit.fill,
                                                 ),
                                               ),
-                                              onTap: () {},
-                                            );
-                                          }),
-                                        ),
-                                      );
-                                    }
+                                            ),
+                                            title: AutoSizeText(
+                                              snapshot.data[index].titleList.toString(),
+                                              maxLines: 1,
+                                              maxFontSize: 14,
+                                              minFontSize: 14,
+                                              overflow: TextOverflow.ellipsis,
+                                              style: GoogleFonts.poppins(
+                                                fontWeight: FontWeight.w500,
+                                                color: Colors.white,
+                                              ),
+                                            ),
+                                            onTap: () {},
+                                          ),
+                                        );
+                                      }),
+                                    ),
+                                  );
+                                }
 
-                                    return Container();
-                                  }),
-                            )
-                          ],
+                                return Container();
+                              }),
                         ),
                       ),
                     ),
                   ],
                 ),
-                // child: Container(
-                //   width: 200,
-                //   height: 250,
-                //   child: FutureBuilder<List<AddPlaylistModel>>(
-                //     future: _myThumbs,
-                //     builder: (context, snapshotx) {
-                //       if (snapshotx.hasData) {
-                //         return GridView.builder(
-                //           gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: 2),
-                //           itemCount: snapshotx.data.length,
-                //           itemBuilder: (BuildContext context, int index) {
-                //             return Container(
-                //               width: 200,
-                //               height: 50,
-                //               decoration: BoxDecoration(
-                //                 shape: BoxShape.rectangle,
-                //                 borderRadius: BorderRadius.all(Radius.circular(30)),
-                //                 color: Colors.transparent,
-                //                 boxShadow: [BoxShadow(color: Colors.black.withOpacity(.2), blurRadius: 10, spreadRadius: 5)],
-                //               ),
-                //               child: Image.file(
-                //                 File(
-                //                   appDocDir.uri.toFilePath().toString() + snapshotx.data[snapshotx.data.length - index - 1].thumbnailList.toString(),
-                //                 ),
-                //                 fit: BoxFit.cover,
-                //               ),
-                //             );
-                //           },
-                //         );
-                //       }
-                //       return Container();
-                //     },
-                //   ),
-                // ),
               ),
             ),
             Padding(
@@ -384,7 +428,10 @@ class _ScreenTwoState extends State<ScreenTwo> {
                     padding: const EdgeInsets.only(bottom: 180.0),
                     child: GestureDetector(
                       onTap: () {
-                        Get.to(AllSongs());
+                        Get.to(AllSongs(
+                          playlistName: widget.playlistName,
+                          check: refresh,
+                        ));
                         print('clicked');
                       },
                       child: Row(

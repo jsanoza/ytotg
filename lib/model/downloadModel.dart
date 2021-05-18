@@ -48,12 +48,14 @@ class AddPlaylistModel {
   String songspathList;
   String thumbnailList;
   int indexinPlaylist;
+  String titleList;
 
   AddPlaylistModel(
     this.playlistName,
     this.songspathList,
     this.thumbnailList,
     this.indexinPlaylist,
+    this.titleList,
   );
 
   AddPlaylistModel.fromMap(Map map) {
@@ -61,6 +63,7 @@ class AddPlaylistModel {
     songspathList = map[songspathList];
     thumbnailList = map[thumbnailList];
     indexinPlaylist = map[indexinPlaylist];
+    titleList = map[titleList];
   }
 
   Map<String, dynamic> toMap() {
@@ -69,6 +72,7 @@ class AddPlaylistModel {
       "songspathList": songspathList,
       "thumbnailList": thumbnailList,
       "indexinPlaylist": indexinPlaylist,
+      "titleList": titleList,
     };
   }
 }
