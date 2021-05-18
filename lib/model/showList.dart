@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:yt_otg/model/dbProvider.dart';
 import 'package:yt_otg/model/singleAudio.dart';
 
@@ -27,7 +28,14 @@ class _ShowListState extends State<ShowList> {
     return new Scaffold(
       appBar: new AppBar(
         backgroundColor: Color(0xff6C5B7B),
-        title: new Text('Hey!'),
+        title: new Text(
+          'Hey!',
+          style: GoogleFonts.poppins(
+            // fontSize: 13,
+            color: Colors.white,
+            fontWeight: FontWeight.w500,
+          ),
+        ),
       ),
       body: Container(
         decoration: BoxDecoration(
@@ -47,9 +55,10 @@ class _ShowListState extends State<ShowList> {
         child: Center(
           child: Text(
             'New features coming soon :)',
-            style: TextStyle(
-              color: Colors.black,
-              fontSize: 20,
+            style: GoogleFonts.poppins(
+              // fontSize: 13,
+              color: Colors.white,
+              fontWeight: FontWeight.w500,
             ),
           ),
         ),

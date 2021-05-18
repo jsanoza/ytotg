@@ -1192,7 +1192,7 @@ class _DashPlayerState extends State<DashPlayer> with TickerProviderStateMixin {
         child: Padding(
           padding: Platform.isAndroid ? const EdgeInsets.only(bottom: 16.0) : const EdgeInsets.only(bottom: 0.0),
           child: IconButton(
-            icon: Icon(Icons.music_note_rounded, color: selected ? Colors.white : Colors.black),
+            icon: Icon(Icons.music_note_rounded, color: selected ? Colors.white : Colors.grey),
             onPressed: () {
               selected = !selected;
               if (selected) {

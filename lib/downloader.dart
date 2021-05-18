@@ -202,19 +202,33 @@ class _PickDLState extends State<PickDL> {
               print(url);
 
               if (url.length == 22) {
-                ScaffoldMessenger.of(context).showSnackBar(
-                  SnackBar(
-                    content: Text('Empty'),
-                  ),
-                );
+                // ScaffoldMessenger.of(context).showSnackBar(
+                //   SnackBar(
+                //     content: Text('Empty'),
+                //   ),
+                // );
+                showDialog(
+                    context: context,
+                    builder: (context) {
+                      return AlertDialog(
+                        content: Text('Empty.'),
+                      );
+                    });
               }
 
               if (url == 'https://m.youtube.com/channel/UC-9-kyTW8ZkZNDHQJ6FgpwQ') {
-                ScaffoldMessenger.of(context).showSnackBar(
-                  SnackBar(
-                    content: Text('Invalid Video'),
-                  ),
-                );
+                // ScaffoldMessenger.of(context).showSnackBar(
+                //   SnackBar(
+                //     content: Text('Invalid Video'),
+                //   ),
+                // );
+                showDialog(
+                    context: context,
+                    builder: (context) {
+                      return AlertDialog(
+                        content: Text('Invalid Video'),
+                      );
+                    });
               }
 
               if (url.length == 41) {
@@ -223,11 +237,18 @@ class _PickDLState extends State<PickDL> {
                 var check = await musicDB.getcount(url.toString());
 
                 if (check.toString() == '1') {
-                  ScaffoldMessenger.of(context).showSnackBar(
-                    SnackBar(
-                      content: Text('Video is already downloaded on this phone.'),
-                    ),
-                  );
+                  // ScaffoldMessenger.of(context).showSnackBar(
+                  //   SnackBar(
+                  //     content: Text('Video is already downloaded on this phone.'),
+                  //   ),
+                  // );
+                  showDialog(
+                      context: context,
+                      builder: (context) {
+                        return AlertDialog(
+                          content: Text('Video is already downloaded on this phone.'),
+                        );
+                      });
                 } else {
                   urlList.add(playlist.url);
                   titleList.add(playlist.title);
@@ -239,11 +260,18 @@ class _PickDLState extends State<PickDL> {
                   _authorList.add(playlist.author);
                   _thumbList.add(playlist.thumbnails.highResUrl);
 
-                  ScaffoldMessenger.of(context).showSnackBar(
-                    SnackBar(
-                      content: Text('Video added to download list.'),
-                    ),
-                  );
+                  // ScaffoldMessenger.of(context).showSnackBar(
+                  //   SnackBar(
+                  //     content: Text('Video added to download list.'),
+                  //   ),
+                  // );
+                  showDialog(
+                      context: context,
+                      builder: (context) {
+                        return AlertDialog(
+                          content: Text('Video added to download list.'),
+                        );
+                      });
                 }
               }
 
@@ -260,11 +288,18 @@ class _PickDLState extends State<PickDL> {
 
                   if (check.toString() == '1') {
                     print(videoUrl.toString());
-                    ScaffoldMessenger.of(context).showSnackBar(
-                      SnackBar(
-                        content: Text('$videoTitle is already downloaded on this phone. Therefore deleting it on the download list.'),
-                      ),
-                    );
+                    // ScaffoldMessenger.of(context).showSnackBar(
+                    //   SnackBar(
+                    //     content: Text('$videoTitle is already downloaded on this phone. Therefore deleting it on the download list.'),
+                    //   ),
+                    // );
+                    showDialog(
+                        context: context,
+                        builder: (context) {
+                          return AlertDialog(
+                            content: Text('$videoTitle is already downloaded on this phone. Therefore deleting it on the download list.'),
+                          );
+                        });
                   } else {
                     if (urlList.contains(videoUrl)) {
                     } else {
@@ -280,11 +315,18 @@ class _PickDLState extends State<PickDL> {
                     }
                   }
                 }
-                ScaffoldMessenger.of(context).showSnackBar(
-                  SnackBar(
-                    content: Text('Videos added to download list.'),
-                  ),
-                );
+                // ScaffoldMessenger.of(context).showSnackBar(
+                //   SnackBar(
+                //     content: Text('Videos added to download list.'),
+                //   ),
+                // );
+                showDialog(
+                    context: context,
+                    builder: (context) {
+                      return AlertDialog(
+                        content: Text('Vidoes added to download list.'),
+                      );
+                    });
               }
             },
             child: Icon(Icons.favorite, color: Colors.white),
@@ -613,10 +655,11 @@ class _PickDLState extends State<PickDL> {
                                           child: Container(
                                             height: 70,
                                             decoration: BoxDecoration(
-                                              shape: BoxShape.rectangle,
-                                              borderRadius: BorderRadius.all(Radius.circular(10)),
-                                              color: Colors.white,
-                                              boxShadow: [BoxShadow(color: Colors.black.withOpacity(.2), blurRadius: 30, spreadRadius: 5)],
+                                              // shape: BoxShape.rectangle,
+                                              // borderRadius: BorderRadius.all(Radius.circular(10)),
+                                              // color: Colors.white,
+                                              // boxShadow: [BoxShadow(color: Colors.black.withOpacity(.2), blurRadius: 30, spreadRadius: 5)],
+                                              color: Colors.white.withOpacity(0.2),
                                             ),
                                             child: ListTile(
                                               leading: Container(
@@ -635,6 +678,7 @@ class _PickDLState extends State<PickDL> {
                                                   overflow: TextOverflow.ellipsis,
                                                   style: GoogleFonts.poppins(
                                                     fontWeight: FontWeight.w500,
+                                                    color: Colors.white,
                                                   ),
                                                 ),
                                               ),
@@ -651,6 +695,7 @@ class _PickDLState extends State<PickDL> {
                                                         overflow: TextOverflow.ellipsis,
                                                         style: GoogleFonts.poppins(
                                                           fontWeight: FontWeight.w500,
+                                                          color: Colors.white,
                                                         ),
                                                       ),
                                                     ),
@@ -666,7 +711,25 @@ class _PickDLState extends State<PickDL> {
                                                           ),
                                                         )
                                                       : Expanded(child: Container(width: Get.width, child: Text(''))),
-                                                  index != indexNow && index < indexNow ? Expanded(child: Container(width: Get.width, child: Text('Downloaded'))) : Expanded(child: Container(width: Get.width, child: Text('  Waiting...'))),
+                                                  index != indexNow && index < indexNow
+                                                      ? Expanded(
+                                                          child: Container(
+                                                            width: Get.width,
+                                                            child: Text(
+                                                              'Downloaded',
+                                                              style: TextStyle(color: Colors.white),
+                                                            ),
+                                                          ),
+                                                        )
+                                                      : Expanded(
+                                                          child: Container(
+                                                            width: Get.width,
+                                                            child: Text(
+                                                              '  Waiting...',
+                                                              style: TextStyle(color: Colors.white),
+                                                            ),
+                                                          ),
+                                                        ),
                                                 ],
                                               ),
                                               onTap: () {},
@@ -752,10 +815,11 @@ class _PickDLState extends State<PickDL> {
                                             child: Container(
                                               height: 70,
                                               decoration: BoxDecoration(
-                                                shape: BoxShape.rectangle,
-                                                borderRadius: BorderRadius.all(Radius.circular(10)),
-                                                color: Colors.white,
-                                                boxShadow: [BoxShadow(color: Colors.black.withOpacity(.2), blurRadius: 30, spreadRadius: 5)],
+                                                // shape: BoxShape.rectangle,
+                                                // borderRadius: BorderRadius.all(Radius.circular(10)),
+                                                // color: Colors.white,
+                                                // boxShadow: [BoxShadow(color: Colors.black.withOpacity(.2), blurRadius: 30, spreadRadius: 5)],
+                                                color: Colors.white.withOpacity(0.2),
                                               ),
                                               child: ListTile(
                                                 leading: Container(
@@ -774,6 +838,7 @@ class _PickDLState extends State<PickDL> {
                                                     overflow: TextOverflow.ellipsis,
                                                     style: GoogleFonts.poppins(
                                                       fontWeight: FontWeight.w500,
+                                                      color: Colors.white,
                                                     ),
                                                   ),
                                                 ),
@@ -790,6 +855,7 @@ class _PickDLState extends State<PickDL> {
                                                           overflow: TextOverflow.ellipsis,
                                                           style: GoogleFonts.poppins(
                                                             fontWeight: FontWeight.w500,
+                                                            color: Colors.white,
                                                           ),
                                                         ),
                                                       ),

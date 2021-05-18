@@ -324,7 +324,7 @@ Are you sure you want to delete this playlist?
                       actions: [
                         IconButton(
                           icon: Icon(
-                            Icons.add,
+                            Icons.search,
                             size: 25,
                           ),
                           onPressed: () async {
@@ -334,10 +334,10 @@ Are you sure you want to delete this playlist?
                         ),
                         IconButton(
                           icon: Icon(
-                            Icons.search,
+                            Icons.add,
                             size: 25,
                           ),
-                          onPressed: () {
+                          onPressed: () async {
                             Get.to(PickDL(
                               notifyList: refreshme,
                             ));
@@ -473,7 +473,16 @@ Are you sure you want to delete this playlist?
                                                 FocusedMenuItem(
                                                   title: Text("Edit"),
                                                   trailingIcon: Icon(Icons.edit_outlined),
-                                                  onPressed: () {},
+                                                  onPressed: () {
+                                                    Get.to(EditInfo(
+                                                      pathList: snapshot.data[snapshot.data.length - index - 1].pathList.toString(),
+                                                      titleList: snapshot.data[snapshot.data.length - index - 1].titleList.toString(),
+                                                      authornameList: snapshot.data[snapshot.data.length - index - 1].authornameList.toString(),
+                                                      thumbnailList: snapshot.data[snapshot.data.length - index - 1].thumbnailList.toString(),
+                                                      urlList: snapshot.data[snapshot.data.length - index - 1].urlList.toString(),
+                                                      hello: refresh,
+                                                    ));
+                                                  },
                                                 ),
                                                 FocusedMenuItem(
                                                     title: Text(
@@ -793,6 +802,7 @@ Are you sure you want to delete this playlist?
                                                         titleList: snapshot.data[snapshot.data.length - index - 1].titleList.toString(),
                                                         authornameList: snapshot.data[snapshot.data.length - index - 1].authornameList.toString(),
                                                         thumbnailList: snapshot.data[snapshot.data.length - index - 1].thumbnailList.toString(),
+                                                        urlList: snapshot.data[snapshot.data.length - index - 1].urlList.toString(),
                                                         hello: refresh,
                                                       ));
                                                     },
@@ -1140,7 +1150,7 @@ Are you sure you want to delete this playlist?
                                 ),
 
                                 SizedBox(
-                                  height: 450,
+                                  height: 500,
                                   child: new FutureBuilder<List<PlaylistModel>>(
                                     future: _myPlaylist,
                                     builder: (context, snapshot) {
@@ -1221,7 +1231,7 @@ Are you sure you want to delete this playlist?
                                                                 Get.to(ScreenTwo(playlistName: snapshot.data[snapshot.data.length - index - 1].playlistName.toString(), check: refresh));
                                                               },
                                                             ),
-                                                            FocusedMenuItem(title: Text("Favorite"), trailingIcon: Icon(Icons.favorite_border), onPressed: () {}),
+                                                            // FocusedMenuItem(title: Text("Favorite"), trailingIcon: Icon(Icons.favorite_border), onPressed: () {}),
                                                             FocusedMenuItem(
                                                                 title: Text(
                                                                   "Delete",
@@ -1269,98 +1279,199 @@ Are you sure you want to delete this playlist?
                                                               widget.callback(audios);
                                                             });
                                                           },
+                                                          // child: Container(
+                                                          //   width: 200,
+                                                          //   height: 224,
+                                                          //   // margin: EdgeInsets.only(left: 8, right: 8),
+                                                          //   child: Center(
+                                                          //     child: Stack(
+                                                          //       children: [
+                                                          //         Container(
+                                                          //           width: 200,
+                                                          //           height: 224,
+                                                          //           child: FutureBuilder<List<AddPlaylistModel>>(
+                                                          //             future: _myCheck,
+                                                          //             builder: (context, snapshotx) {
+                                                          //               if (snapshotx.hasData) {
+                                                          //                 return GridView.builder(
+                                                          //                   gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: 2),
+                                                          //                   itemCount: snapshotx.data.length,
+                                                          //                   physics: NeverScrollableScrollPhysics(),
+                                                          //                   itemBuilder: (BuildContext context, int index) {
+                                                          //                     // return Card(
+                                                          //                     //   color: Colors.green,
+                                                          //                     //   child:
+                                                          //                     // );
+                                                          //                     return Container(
+                                                          //                       width: 200,
+                                                          //                       height: 80,
+                                                          //                       decoration: BoxDecoration(
+                                                          //                         shape: BoxShape.rectangle,
+                                                          //                         borderRadius: BorderRadius.all(Radius.circular(30)),
+                                                          //                         color: Colors.transparent,
+                                                          //                         boxShadow: [BoxShadow(color: Colors.black.withOpacity(.2), blurRadius: 10, spreadRadius: 5)],
+                                                          //                       ),
+                                                          //                       child: Image.file(
+                                                          //                         File(
+                                                          //                           appDocDir.uri.toFilePath().toString() + snapshotx.data[index].thumbnailList.toString(),
+                                                          //                         ),
+                                                          //                         fit: BoxFit.cover,
+                                                          //                       ),
+                                                          //                     );
+                                                          //                   },
+                                                          //                 );
+                                                          //               }
+                                                          //               return Container();
+                                                          //             },
+                                                          //           ),
+                                                          //         ),
+                                                          //         Align(
+                                                          //           alignment: Alignment.center,
+                                                          //           child: Column(
+                                                          //             mainAxisSize: MainAxisSize.min,
+                                                          //             children: [
+                                                          //               Padding(
+                                                          //                 padding: const EdgeInsets.only(left: 18.0, right: 8, bottom: 28, top: 35),
+                                                          //                 child: Icon(
+                                                          //                   Icons.play_arrow,
+                                                          //                   size: 60,
+                                                          //                   color: Colors.white.withOpacity(0.2),
+                                                          //                 ),
+                                                          //               ),
+                                                          //             ],
+                                                          //           ),
+                                                          //         ),
+                                                          //         Align(
+                                                          //           alignment: Alignment.bottomCenter,
+                                                          //           child: Padding(
+                                                          //             padding: const EdgeInsets.all(8.0),
+                                                          //             child: Container(
+                                                          //               color: Colors.black.withOpacity(.6),
+                                                          //               child: Column(
+                                                          //                 mainAxisSize: MainAxisSize.min,
+                                                          //                 children: [
+                                                          //                   Padding(
+                                                          //                     padding: const EdgeInsets.only(left: 8.0, right: 8, bottom: 0),
+                                                          //                     child: AutoSizeText(
+                                                          //                       snapshot.data[snapshot.data.length - index - 1].playlistName.toString(),
+                                                          //                       maxLines: 1,
+                                                          //                       maxFontSize: 14,
+                                                          //                       minFontSize: 14,
+                                                          //                       overflow: TextOverflow.ellipsis,
+                                                          //                       style: GoogleFonts.poppins(
+                                                          //                         fontWeight: FontWeight.w500,
+                                                          //                         color: Colors.white,
+                                                          //                       ),
+                                                          //                     ),
+                                                          //                   ),
+                                                          //                 ],
+                                                          //               ),
+                                                          //             ),
+                                                          //           ),
+                                                          //         ),
+                                                          //       ],
+                                                          //     ),
+                                                          //   ),
+                                                          // ),
                                                           child: Container(
-                                                            width: 200,
-                                                            height: 224,
-                                                            // margin: EdgeInsets.only(left: 8, right: 8),
-                                                            child: Center(
-                                                              child: Stack(
-                                                                children: [
-                                                                  Container(
+                                                            margin: EdgeInsets.only(left: 0, right: 0),
+                                                            width: 250,
+                                                            height: 250,
+                                                            child: Stack(
+                                                              children: [
+                                                                Padding(
+                                                                  padding: const EdgeInsets.only(bottom: 0.0),
+                                                                  child: Container(
                                                                     width: 200,
-                                                                    height: 224,
-                                                                    child: FutureBuilder<List<AddPlaylistModel>>(
-                                                                      future: _myCheck,
-                                                                      builder: (context, snapshotx) {
-                                                                        if (snapshotx.hasData) {
-                                                                          return GridView.builder(
-                                                                            gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: 2),
-                                                                            itemCount: snapshotx.data.length,
-                                                                            physics: NeverScrollableScrollPhysics(),
-                                                                            itemBuilder: (BuildContext context, int index) {
-                                                                              // return Card(
-                                                                              //   color: Colors.green,
-                                                                              //   child:
-                                                                              // );
-                                                                              return Container(
-                                                                                width: 200,
-                                                                                height: 80,
-                                                                                decoration: BoxDecoration(
-                                                                                  shape: BoxShape.rectangle,
-                                                                                  borderRadius: BorderRadius.all(Radius.circular(30)),
-                                                                                  color: Colors.transparent,
-                                                                                  boxShadow: [BoxShadow(color: Colors.black.withOpacity(.2), blurRadius: 10, spreadRadius: 5)],
-                                                                                ),
-                                                                                child: Image.file(
-                                                                                  File(
-                                                                                    appDocDir.uri.toFilePath().toString() + snapshotx.data[index].thumbnailList.toString(),
-                                                                                  ),
-                                                                                  fit: BoxFit.cover,
-                                                                                ),
-                                                                              );
-                                                                            },
-                                                                          );
-                                                                        }
-                                                                        return Container();
-                                                                      },
-                                                                    ),
-                                                                  ),
-                                                                  Align(
-                                                                    alignment: Alignment.center,
-                                                                    child: Column(
-                                                                      mainAxisSize: MainAxisSize.min,
-                                                                      children: [
-                                                                        Padding(
-                                                                          padding: const EdgeInsets.only(left: 18.0, right: 8, bottom: 28, top: 35),
-                                                                          child: Icon(
-                                                                            Icons.play_arrow,
-                                                                            size: 60,
-                                                                            color: Colors.white.withOpacity(0.2),
+                                                                    height: 240,
+                                                                    child: Center(
+                                                                      child: Stack(
+                                                                        children: [
+                                                                          Container(
+                                                                            // width: 250,
+                                                                            // height: 250,
+                                                                            child: FutureBuilder<List<AddPlaylistModel>>(
+                                                                              future: _myCheck,
+                                                                              builder: (context, snapshotx) {
+                                                                                if (snapshotx.hasData) {
+                                                                                  return GridView.builder(
+                                                                                    gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: 2),
+                                                                                    physics: NeverScrollableScrollPhysics(),
+                                                                                    itemCount: snapshotx.data.length,
+                                                                                    itemBuilder: (BuildContext context, int index) {
+                                                                                      return Container(
+                                                                                        // width: 200,
+                                                                                        // height: 0,
+                                                                                        // decoration: BoxDecoration(
+                                                                                        //   shape: BoxShape.rectangle,
+                                                                                        //   borderRadius: BorderRadius.all(Radius.circular(30)),
+                                                                                        //   color: Colors.transparent,
+                                                                                        //   boxShadow: [BoxShadow(color: Colors.black.withOpacity(.2), blurRadius: 10, spreadRadius: 5)],
+                                                                                        // ),
+                                                                                        child: Image.file(
+                                                                                          File(
+                                                                                            appDocDir.uri.toFilePath().toString() + snapshotx.data[snapshotx.data.length - index - 1].thumbnailList.toString(),
+                                                                                          ),
+                                                                                          fit: BoxFit.cover,
+                                                                                        ),
+                                                                                      );
+                                                                                    },
+                                                                                  );
+                                                                                }
+                                                                                return Container();
+                                                                              },
+                                                                            ),
                                                                           ),
-                                                                        ),
-                                                                      ],
-                                                                    ),
-                                                                  ),
-                                                                  Align(
-                                                                    alignment: Alignment.bottomCenter,
-                                                                    child: Padding(
-                                                                      padding: const EdgeInsets.all(8.0),
-                                                                      child: Container(
-                                                                        color: Colors.black.withOpacity(.6),
-                                                                        child: Column(
-                                                                          mainAxisSize: MainAxisSize.min,
-                                                                          children: [
-                                                                            Padding(
-                                                                              padding: const EdgeInsets.only(left: 8.0, right: 8, bottom: 0),
-                                                                              child: AutoSizeText(
-                                                                                snapshot.data[snapshot.data.length - index - 1].playlistName.toString(),
-                                                                                maxLines: 1,
-                                                                                maxFontSize: 14,
-                                                                                minFontSize: 14,
-                                                                                overflow: TextOverflow.ellipsis,
-                                                                                style: GoogleFonts.poppins(
-                                                                                  fontWeight: FontWeight.w500,
-                                                                                  color: Colors.white,
+                                                                          Align(
+                                                                            alignment: Alignment.center,
+                                                                            child: Column(
+                                                                              mainAxisSize: MainAxisSize.min,
+                                                                              children: [
+                                                                                Padding(
+                                                                                  padding: const EdgeInsets.only(left: 18.0, right: 8, bottom: 28, top: 35),
+                                                                                  child: Icon(
+                                                                                    Icons.play_arrow,
+                                                                                    size: 60,
+                                                                                    color: Colors.white.withOpacity(0.2),
+                                                                                  ),
+                                                                                ),
+                                                                              ],
+                                                                            ),
+                                                                          ),
+                                                                          Align(
+                                                                            alignment: Alignment.bottomCenter,
+                                                                            child: Padding(
+                                                                              padding: const EdgeInsets.all(8.0),
+                                                                              child: Container(
+                                                                                color: Colors.white.withOpacity(0.2),
+                                                                                child: Column(
+                                                                                  mainAxisSize: MainAxisSize.min,
+                                                                                  children: [
+                                                                                    Padding(
+                                                                                      padding: const EdgeInsets.only(left: 8.0, right: 8, bottom: 0),
+                                                                                      child: AutoSizeText(
+                                                                                        snapshot.data[snapshot.data.length - index - 1].playlistName.toString(),
+                                                                                        maxLines: 1,
+                                                                                        maxFontSize: 14,
+                                                                                        minFontSize: 14,
+                                                                                        overflow: TextOverflow.ellipsis,
+                                                                                        style: GoogleFonts.poppins(
+                                                                                          fontWeight: FontWeight.w500,
+                                                                                          color: Colors.white,
+                                                                                        ),
+                                                                                      ),
+                                                                                    ),
+                                                                                  ],
                                                                                 ),
                                                                               ),
                                                                             ),
-                                                                          ],
-                                                                        ),
+                                                                          ),
+                                                                        ],
                                                                       ),
                                                                     ),
                                                                   ),
-                                                                ],
-                                                              ),
+                                                                ),
+                                                              ],
                                                             ),
                                                           ),
                                                         ),

@@ -48,17 +48,24 @@ class MemoDbProvider {
     });
   }
 
-  // Future<String> lastIndex(id) async {
-  //   final db = await init();
-  //   // select * from <TABLE> where row_id = (select max(row_id) from <TABLE>);
-  //   final lastIndexs = await db.rawQuery("SELECT indexinPlaylist from pathPlaylist WHERE playlistName = \'$id'");
-  //   print(lastIndexs.length);
-
-  //   lastIndexs.forEach((element) {
-  //     element.
-  //   })
-  //   return lastIndexs.toString();
-  // }
+  Future<int> updateMeta(String urlList, String authornameList, String thumbnailList, String pathList, String titleList, String newTitle, String newArtist) async {
+    final db = await init();
+    await db.rawUpdate("UPDATE Music SET titleList = ?, authornameList = ? WHERE titleList = ? AND pathList = ? AND urlList = ? ", [
+      newTitle,
+      newArtist,
+      titleList,
+      pathList,
+      urlList,
+    ]).then((value) async {
+      await db.rawUpdate("UPDATE pathPlaylist SET titleList = ? WHERE songspathList = ? AND thumbnailList = ? AND titleList = ?", [
+        newTitle,
+        pathList,
+        thumbnailList,
+        titleList,
+      ]);
+      print('check');
+    });
+  }
 
   Future<int> addtoPlaylist(AddPlaylistModel item) async {
     final db = await init();
