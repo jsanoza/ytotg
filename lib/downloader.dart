@@ -375,8 +375,20 @@ class _PickDLState extends State<PickDL> {
       var manifest = await yt.videos.streamsClient.getManifest(id);
       var audio = manifest.audioOnly.last;
       Directory appDocDir = await getApplicationDocumentsDirectory();
-      var tempTitle = '${titleList[i]}'.replaceAll(r'\', '').replaceAll('/', '').replaceAll('*', '').replaceAll('?', '').replaceAll('"', '').replaceAll('<', '').replaceAll('>', '').replaceAll('|', '').replaceAll('{', '').replaceAll('}', '').replaceAll('\'', '');
-      var tempPath = '${titleList[i]}.${audio.container.name}'.replaceAll(r'\', '').replaceAll('/', '').replaceAll('*', '').replaceAll('?', '').replaceAll('"', '').replaceAll('<', '').replaceAll('>', '').replaceAll('|', '').replaceAll('{', '').replaceAll('}', '').replaceAll('\'', '');
+      var tempTitle =
+          '${titleList[i]}'.replaceAll(r'\', '').replaceAll('/', '').replaceAll('*', '').replaceAll('?', '').replaceAll('"', '').replaceAll('<', '').replaceAll('>', '').replaceAll('|', '').replaceAll('{', '').replaceAll('}', '').replaceAll('\'', '');
+      var tempPath = '${titleList[i]}.${audio.container.name}'
+          .replaceAll(r'\', '')
+          .replaceAll('/', '')
+          .replaceAll('*', '')
+          .replaceAll('?', '')
+          .replaceAll('"', '')
+          .replaceAll('<', '')
+          .replaceAll('>', '')
+          .replaceAll('|', '')
+          .replaceAll('{', '')
+          .replaceAll('}', '')
+          .replaceAll('\'', '');
       var filePath = path.join(appDocDir.uri.toFilePath(), tempPath);
 
       print(filePath.toString());
@@ -392,6 +404,10 @@ class _PickDLState extends State<PickDL> {
       var filePath2 = path.join(appDocDir.uri.toFilePath(), '${tempTitle}1.mp4');
       var filey = File(fileq);
       var filex = File(filePath2);
+      if (await filex.exists()) {
+        await filex.delete();
+      }
+
       String okay2 = '\"${filex.path}\"';
       String okay = '\"${filey.path}\"';
 
@@ -411,7 +427,18 @@ class _PickDLState extends State<PickDL> {
           titleList[i].replaceAll(r'\', '').replaceAll('/', '').replaceAll('*', '').replaceAll('?', '').replaceAll('"', '').replaceAll('<', '').replaceAll('>', '').replaceAll('|', '').replaceAll('{', '').replaceAll('}', '').replaceAll('\'', ''),
           authorList[i].replaceAll(r'\', '').replaceAll('/', '').replaceAll('*', '').replaceAll('?', '').replaceAll('"', '').replaceAll('<', '').replaceAll('>', '').replaceAll('|', '').replaceAll('{', '').replaceAll('}', '').replaceAll('\'', ''),
           '$split.jpg',
-          '${tempTitle}1.mp4'.replaceAll(r'\', '').replaceAll('/', '').replaceAll('*', '').replaceAll('?', '').replaceAll('"', '').replaceAll('<', '').replaceAll('>', '').replaceAll('|', '').replaceAll('{', '').replaceAll('}', '').replaceAll('\'', ''),
+          '${tempTitle}1.mp4'
+              .replaceAll(r'\', '')
+              .replaceAll('/', '')
+              .replaceAll('*', '')
+              .replaceAll('?', '')
+              .replaceAll('"', '')
+              .replaceAll('<', '')
+              .replaceAll('>', '')
+              .replaceAll('|', '')
+              .replaceAll('{', '')
+              .replaceAll('}', '')
+              .replaceAll('\'', ''),
         );
         await musicDB.addItem(memo);
 
@@ -1079,6 +1106,8 @@ class _PickDLState extends State<PickDL> {
                         onWebViewCreated: (WebViewController webViewController) {
                           _controller.complete(webViewController);
                         },
+                        allowsInlineMediaPlayback: true,
+                        initialMediaPlaybackPolicy: AutoMediaPlaybackPolicy.require_user_action_for_all_media_types,
                       ),
                     ),
                   ],

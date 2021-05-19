@@ -3,6 +3,7 @@ import 'dart:math';
 
 import 'package:assets_audio_player/assets_audio_player.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_ffmpeg/flutter_ffmpeg.dart';
 import 'package:flutter_ffmpeg/media_information.dart';
 import 'package:get/get.dart';
@@ -10,6 +11,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:image_cropper/image_cropper.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:marquee/marquee.dart';
+import 'package:mask_text_input_formatter/mask_text_input_formatter.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:yt_otg/model/dbProvider.dart';
@@ -44,6 +46,8 @@ class _EditInfoState extends State<EditInfo> {
   TextEditingController _titleTextController;
   TextEditingController _artistTextContoller;
   MemoDbProvider musicDB = MemoDbProvider();
+  TextEditingController _playlistTextController;
+  TextEditingController _endplaylistTextController;
   // double initialBarPosition = 0.0;
   // double barWidth = 5.0;
   // int maxBarHight = 50,
@@ -135,6 +139,21 @@ class _EditInfoState extends State<EditInfo> {
     });
   }
 
+  Duration parseDuration(String s) {
+    int hours = 0;
+    int minutes = 0;
+    int micros;
+    List<String> parts = s.split(':');
+    if (parts.length > 2) {
+      hours = int.parse(parts[parts.length - 3]);
+    }
+    if (parts.length > 1) {
+      minutes = int.parse(parts[parts.length - 2]);
+    }
+    micros = (double.parse(parts[parts.length - 1]) * 1000000).round();
+    return Duration(hours: hours, minutes: minutes, microseconds: micros);
+  }
+
   showAlertDialog(BuildContext context, urlList, authornameList, thumbnailList, pathList, titleList, newTitle, newArtist) {
     Widget continueButton = FlatButton(
       child: Text(
@@ -149,11 +168,44 @@ class _EditInfoState extends State<EditInfo> {
         bool firstdone = false;
         bool secondone = false;
         bool thirdone = false;
+        Duration first;
+        Duration second;
         if (newTitle == '') {
           newTitle = widget.titleList;
         }
         if (newArtist == '') {
           newArtist = widget.authornameList;
+        }
+
+        if (_playlistTextController.text != '') {
+          setState(() {
+            first = parseDuration(_playlistTextController.text);
+          });
+          // second = parseDuration(_endplaylistTextController.text);
+          print('EDited');
+        }
+
+        if (_playlistTextController.text == '') {
+          setState(() {
+            first = _currentRangeValues.start.seconds;
+          });
+          // second = _currentRangeValues.end.seconds;
+        }
+
+        if (_endplaylistTextController.text != '') {
+          setState(() {
+            second = parseDuration(_endplaylistTextController.text);
+          });
+          // second = parseDuration(_endplaylistTextController.text);
+          print('EDited');
+        }
+
+        if (_endplaylistTextController.text == '') {
+          setState(() {
+            second = _currentRangeValues.end.seconds;
+          });
+          // second = parseDuration(_endplaylistTextController.text);
+          print('EDited');
         }
 
         File file2 = new File(path.join(appDocDir.uri.toFilePath(), '${widget.thumbnailList}'));
@@ -186,14 +238,14 @@ class _EditInfoState extends State<EditInfo> {
         if (await file2x2.exists()) {
           String okay2 = '\"${file2x2.path}\"';
           String okay = '\"${filePath2.path}\"';
-          await _flutterFFmpeg.execute("-ss ${_currentRangeValues.start.seconds} -i $okay2 -to ${_currentRangeValues.end.seconds} -c copy $okay").then((rt) async {
+          await _flutterFFmpeg.execute("-ss $first -i $okay2 -to $second -c copy $okay").then((rt) async {
             print('[TRIMMED VIDEO RESULT] : $rt');
             File zz = new File(path.join(appDocDir.uri.toFilePath(), '${widget.pathList}'));
             zz.delete().then((value) async {
               File file2x = new File(path.join(appDocDir.uri.toFilePath(), '${widget.pathList}')); //original
               String newokay2 = '\"${file2x.path}\"';
               String newokay = '\"${filePath2.path}\"';
-              await _flutterFFmpeg.execute("-ss ${_currentRangeValues.start.seconds} -i $newokay -to ${_currentRangeValues.end.seconds} -c copy $newokay2").then((value) {
+              await _flutterFFmpeg.execute("-ss $first -i $newokay -to $second -c copy $newokay2").then((value) {
                 print('[TRIMMED VIDEO RESULT #2] : $value');
                 File lastDelete = new File(path.join(appDocDir.uri.toFilePath(), '$tempTitle'));
                 lastDelete.delete().then((value) {
@@ -367,9 +419,12 @@ Please double check.
     for (var i = 0; i < 50; i++) {
       bars.add(r.nextInt(200));
     }
-
+    _playlistTextController = TextEditingController();
     _titleTextController = TextEditingController();
+
     _artistTextContoller = TextEditingController();
+
+    _endplaylistTextController = TextEditingController();
 
     super.initState();
   }
@@ -507,24 +562,8 @@ Please double check.
                           setState(() {
                             _currentRangeValues = values;
 
-                            print(_currentRangeValues.end);
-                          });
-
-                          await _assetsAudioPlayer
-                              .open(
-                            Audio.file(
-                              appDocDir.uri.toFilePath().toString() + widget.pathList,
-                            ),
-                            showNotification: true,
-                            loopMode: LoopMode.none,
-                            playInBackground: PlayInBackground.disabledRestoreOnForeground,
-                            audioFocusStrategy: AudioFocusStrategy.none(),
-                            seek: _currentRangeValues.start.seconds,
-                          )
-                              .then((value) {
-                            setState(() {
-                              _isPlaying = true;
-                            });
+                            print(_currentRangeValues.start);
+                            _assetsAudioPlayer.seek(_currentRangeValues.start.seconds);
                           });
                         },
                       ),
@@ -536,7 +575,7 @@ Please double check.
             Padding(
               padding: const EdgeInsets.only(top: 470.0),
               child: Container(
-                height: 50,
+                height: 60,
                 width: Get.width,
                 // color: Colors.red,
                 child: Column(
@@ -563,20 +602,228 @@ Please double check.
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceAround,
                       children: [
-                        Text(
-                          durationToString(_currentRangeValues.start.seconds),
-                          style: GoogleFonts.poppins(
-                            fontWeight: FontWeight.w500,
-                            color: Colors.white,
-                          ),
-                        ),
-                        Text(
-                          durationToString(_currentRangeValues.end.seconds),
-                          style: GoogleFonts.poppins(
-                            fontWeight: FontWeight.w500,
-                            color: Colors.white,
-                          ),
-                        ),
+                        // Text(
+                        //   durationToString(_currentRangeValues.start.seconds),
+                        //   style: GoogleFonts.poppins(
+                        //     fontWeight: FontWeight.w500,
+                        //     color: Colors.white,
+                        //   ),
+                        // ),
+                        Focus(
+                            child: Container(
+                              height: 40,
+                              width: 70,
+                              child: TextField(
+                                style: GoogleFonts.poppins(
+                                  fontWeight: FontWeight.w500,
+                                  color: Colors.white,
+                                  // fontSize: 25,
+                                ),
+                                // maxLength: 15,
+                                controller: _playlistTextController,
+                                maxLength: 5,
+                                inputFormatters: [
+                                  MaskTextInputFormatter(mask: "##:##"),
+                                ],
+                                keyboardType: TextInputType.number,
+                                decoration: InputDecoration(
+                                  counterText: '',
+                                  isDense: true,
+                                  contentPadding: EdgeInsets.only(left: 25.0),
+                                  hintText: durationToString(_currentRangeValues.start.seconds),
+                                  hintStyle: TextStyle(color: Colors.white),
+                                  enabledBorder: OutlineInputBorder(
+                                    borderSide: BorderSide(color: Colors.transparent, width: 1),
+                                  ),
+                                  focusedBorder: OutlineInputBorder(
+                                    borderSide: BorderSide(color: Colors.white, width: 1),
+                                    // borderRadius: BorderRadius.circular(20.0),
+                                  ),
+                                ),
+                              ),
+                            ),
+                            onFocusChange: (hasFocus) {
+                              if (!hasFocus) {
+                                setState(() {
+                                  // _showSave = false;
+                                  if (_playlistTextController.text != '') {
+                                    if (_playlistTextController.text.length < 5) {
+                                      showDialog(
+                                          context: context,
+                                          builder: (context) {
+                                            return AlertDialog(
+                                              content: Text('Start Trim time is invalid.'),
+                                            );
+                                          }).then((value) {
+                                        _playlistTextController.text = '';
+                                        FocusScope.of(context).requestFocus(new FocusNode());
+                                        SystemChannels.textInput.invokeMethod('TextInput.hide');
+                                      });
+                                    } else {
+                                      var hello = parseDuration(_playlistTextController.text);
+                                      print(hello.inSeconds.toString() + "FINAL");
+                                      print(seconds.toString() + "FINAL");
+                                      if (hello.inSeconds > seconds || hello.inSeconds < 0) {
+                                        showDialog(
+                                            context: context,
+                                            builder: (context) {
+                                              return AlertDialog(
+                                                content: Text('Start Trim time is invalid.'),
+                                              );
+                                            }).then((value) {
+                                          _playlistTextController.text = '';
+                                          FocusScope.of(context).requestFocus(new FocusNode());
+                                          SystemChannels.textInput.invokeMethod('TextInput.hide');
+                                        });
+                                      }
+                                    }
+                                  }
+                                });
+                              } else {
+                                setState(() {
+                                  // _showSave = true;
+                                  if (_playlistTextController.text != '') {
+                                    if (_playlistTextController.text.length < 5) {
+                                      showDialog(
+                                          context: context,
+                                          builder: (context) {
+                                            return AlertDialog(
+                                              content: Text('Start Trim time is invalid.'),
+                                            );
+                                          }).then((value) {
+                                        _playlistTextController.text = '';
+                                      });
+                                    } else {
+                                      var hello = parseDuration(_playlistTextController.text);
+                                      print(hello.inSeconds.toString() + "FINAL");
+                                      print(seconds.toString() + "FINAL");
+                                      if (hello.inSeconds > seconds || hello.inSeconds < 0) {
+                                        showDialog(
+                                            context: context,
+                                            builder: (context) {
+                                              return AlertDialog(
+                                                content: Text('Start Trim time is invalid.'),
+                                              );
+                                            }).then((value) {
+                                          _playlistTextController.text = '';
+                                        });
+                                      }
+                                    }
+                                  }
+                                });
+                              }
+                            }),
+                        // Text(
+                        //   durationToString(_currentRangeValues.end.seconds),
+                        //   style: GoogleFonts.poppins(
+                        //     fontWeight: FontWeight.w500,
+                        //     color: Colors.white,
+                        //   ),
+                        // ),
+                        Focus(
+                            child: Container(
+                              height: 40,
+                              width: 70,
+                              child: TextField(
+                                style: GoogleFonts.poppins(
+                                  fontWeight: FontWeight.w500,
+                                  color: Colors.white,
+                                  // fontSize: 25,
+                                ),
+                                maxLength: 5,
+                                inputFormatters: [
+                                  MaskTextInputFormatter(mask: "##:##"),
+                                ],
+                                keyboardType: TextInputType.number,
+                                controller: _endplaylistTextController,
+                                decoration: InputDecoration(
+                                  counterText: '',
+                                  isDense: true,
+                                  contentPadding: EdgeInsets.only(left: 25.0),
+                                  hintText: durationToString(_currentRangeValues.end.seconds),
+                                  hintStyle: TextStyle(color: Colors.white),
+                                  enabledBorder: OutlineInputBorder(
+                                    borderSide: BorderSide(color: Colors.transparent, width: 1),
+                                  ),
+                                  focusedBorder: OutlineInputBorder(
+                                    borderSide: BorderSide(color: Colors.white, width: 1),
+                                    // borderRadius: BorderRadius.circular(20.0),
+                                  ),
+                                ),
+                              ),
+                            ),
+                            onFocusChange: (hasFocus) {
+                              if (!hasFocus) {
+                                setState(() {
+                                  // _showSave = false;
+
+                                  if (_endplaylistTextController.text != '') {
+                                    if (_playlistTextController.text.length < 5) {
+                                      showDialog(
+                                          context: context,
+                                          builder: (context) {
+                                            return AlertDialog(
+                                              content: Text('End Trim time is invalid.'),
+                                            );
+                                          }).then((value) {
+                                        _endplaylistTextController.text = '';
+                                        FocusScope.of(context).requestFocus(new FocusNode());
+                                        SystemChannels.textInput.invokeMethod('TextInput.hide');
+                                      });
+                                    } else {
+                                      var hello = parseDuration(_endplaylistTextController.text);
+                                      print(hello.inSeconds.toString() + "FINAL");
+                                      print(seconds.toString() + "FINAL");
+                                      if (hello.inSeconds > seconds || hello.inSeconds <= 0) {
+                                        showDialog(
+                                            context: context,
+                                            builder: (context) {
+                                              return AlertDialog(
+                                                content: Text('End Trim time is invalid.'),
+                                              );
+                                            }).then((value) {
+                                          _endplaylistTextController.text = '';
+                                          FocusScope.of(context).requestFocus(new FocusNode());
+                                          SystemChannels.textInput.invokeMethod('TextInput.hide');
+                                        });
+                                      }
+                                    }
+                                  }
+                                });
+                              } else {
+                                setState(() {
+                                  // _showSave = true;
+                                  if (_endplaylistTextController.text != '') {
+                                    if (_endplaylistTextController.text.length < 5) {
+                                      showDialog(
+                                          context: context,
+                                          builder: (context) {
+                                            return AlertDialog(
+                                              content: Text('End Trim time is invalid.'),
+                                            );
+                                          }).then((value) {
+                                        _endplaylistTextController.text = '';
+                                      });
+                                    } else {
+                                      var hello = parseDuration(_endplaylistTextController.text);
+                                      print(hello.inSeconds.toString() + "FINAL");
+                                      print(seconds.toString() + "FINAL");
+                                      if (hello.inSeconds > seconds || hello.inSeconds <= 0) {
+                                        showDialog(
+                                            context: context,
+                                            builder: (context) {
+                                              return AlertDialog(
+                                                content: Text('End Trim time is invalid.'),
+                                              );
+                                            }).then((value) {
+                                          _endplaylistTextController.text = '';
+                                        });
+                                      }
+                                    }
+                                  }
+                                });
+                              }
+                            }),
                       ],
                     ),
                   ],
@@ -606,10 +853,32 @@ Please double check.
                             ),
                           ),
                           onPressed: () async {
-                            _assetsAudioPlayer.playOrPause();
-                            setState(() {
-                              _isPlaying = !_isPlaying;
-                            });
+                            // setState(() {
+                            //   _isPlaying = !_isPlaying;
+                            // });
+                            if (!_isPlaying) {
+                              await _assetsAudioPlayer
+                                  .open(
+                                Audio.file(
+                                  appDocDir.uri.toFilePath().toString() + widget.pathList,
+                                ),
+                                showNotification: true,
+                                loopMode: LoopMode.none,
+                                playInBackground: PlayInBackground.disabledRestoreOnForeground,
+                                audioFocusStrategy: AudioFocusStrategy.none(),
+                                seek: _currentRangeValues.start.seconds,
+                              )
+                                  .then((value) {
+                                setState(() {
+                                  _isPlaying = !_isPlaying;
+                                });
+                              });
+                            } else {
+                              _assetsAudioPlayer.playOrPause();
+                              setState(() {
+                                _isPlaying = !_isPlaying;
+                              });
+                            }
                           },
                           child: _isPlaying
                               ? Icon(

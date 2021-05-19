@@ -92,6 +92,8 @@ class _DashPlaylistState extends State<DashPlaylist> {
     } catch (e) {
       // Error in getting access to the file.
     }
+    print(file.path);
+
   }
 
   refresh() {
