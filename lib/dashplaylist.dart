@@ -41,7 +41,6 @@ Future<List<AddPlaylistModel>> getSongsPlaylist(playlistName1) async {
   return songsThumbs;
 }
 
-// Future<List<AddPlaylistModel>> _myThumbs = getSongsPlaylist(playlistName1);
 Future<List<DlModel>> _myData = fetchEmployeesFromDatabase();
 Future<List<PlaylistModel>> _myPlaylist = getPlaylistfromDB();
 typedef void StringCallback(List<Audio> val);
@@ -58,7 +57,6 @@ class DashPlaylist extends StatefulWidget {
 }
 
 class _DashPlaylistState extends State<DashPlaylist> {
-  // final FlutterFFmpeg _flutterFFmpeg = new FlutterFFmpeg();
   List<Audio> audios = [];
   List<String> pathfin2 = [];
   List<String> pathfinal = [];
@@ -93,7 +91,6 @@ class _DashPlaylistState extends State<DashPlaylist> {
       // Error in getting access to the file.
     }
     print(file.path);
-
   }
 
   refresh() {
@@ -123,7 +120,7 @@ class _DashPlaylistState extends State<DashPlaylist> {
     Widget continueButton = FlatButton(
       child: Text(
         "Delete",
-        style: GoogleFonts.poppins(
+        style: GoogleFonts.dmSans(
           // fontSize: 25,
           color: Colors.pink,
           fontWeight: FontWeight.w500,
@@ -153,9 +150,9 @@ class _DashPlaylistState extends State<DashPlaylist> {
     Widget cancelButton = FlatButton(
       child: Text(
         "Cancel",
-        style: GoogleFonts.poppins(
+        style: GoogleFonts.dmSans(
           // fontSize: 25,
-          color: Colors.black87,
+          // color: Colors.black87,
           fontWeight: FontWeight.w500,
         ),
       ),
@@ -169,7 +166,7 @@ class _DashPlaylistState extends State<DashPlaylist> {
     AlertDialog alert = AlertDialog(
       title: Text(
         "Delete",
-        style: GoogleFonts.poppins(
+        style: GoogleFonts.dmSans(
           // fontSize: 25,
           color: Colors.red,
           fontWeight: FontWeight.w500,
@@ -180,9 +177,9 @@ class _DashPlaylistState extends State<DashPlaylist> {
 Are you sure you want to delete this track?
                                                                               ''',
         maxLines: 20,
-        style: GoogleFonts.poppins(
+        style: GoogleFonts.dmSans(
           // fontSize: 25,
-          color: Colors.black87,
+          // color: Colors.white,
           fontWeight: FontWeight.w500,
         ),
       ),
@@ -205,7 +202,7 @@ Are you sure you want to delete this track?
     Widget continueButton = FlatButton(
       child: Text(
         "Delete",
-        style: GoogleFonts.poppins(
+        style: GoogleFonts.dmSans(
           // fontSize: 25,
           color: Colors.pink,
           fontWeight: FontWeight.w500,
@@ -237,9 +234,9 @@ Are you sure you want to delete this track?
     Widget cancelButton = FlatButton(
       child: Text(
         "Cancel",
-        style: GoogleFonts.poppins(
+        style: GoogleFonts.dmSans(
           // fontSize: 25,
-          color: Colors.black87,
+          // color: Colors.white,
           fontWeight: FontWeight.w500,
         ),
       ),
@@ -253,7 +250,7 @@ Are you sure you want to delete this track?
     AlertDialog alert = AlertDialog(
       title: Text(
         "Delete",
-        style: GoogleFonts.poppins(
+        style: GoogleFonts.dmSans(
           // fontSize: 25,
           color: Colors.red,
           fontWeight: FontWeight.w500,
@@ -264,9 +261,9 @@ Are you sure you want to delete this track?
 Are you sure you want to delete this playlist?
                                                                               ''',
         maxLines: 20,
-        style: GoogleFonts.poppins(
+        style: GoogleFonts.dmSans(
           // fontSize: 25,
-          color: Colors.black87,
+          // color: Colors.white,
           fontWeight: FontWeight.w500,
         ),
       ),
@@ -295,13 +292,17 @@ Are you sure you want to delete this playlist?
           decoration: BoxDecoration(
             gradient: new LinearGradient(
                 colors: [
-                  Color(0xffC06C84),
-                  Color(0xff355C7D),
-                  Color(0xff6C5B7B),
+                  Theme.of(context).colorScheme.primary,
+                  Theme.of(context).colorScheme.secondary,
+                  Theme.of(context).colorScheme.primaryVariant,
                 ],
                 begin: const FractionalOffset(0.0, 0.0),
                 end: const FractionalOffset(1.0, 1.0),
-                stops: [0.0, 1.0, 1.0],
+                stops: [
+                  0.0,
+                  1.0,
+                  1.0,
+                ],
                 tileMode: TileMode.clamp),
           ),
           child: Stack(
@@ -316,13 +317,12 @@ Are you sure you want to delete this playlist?
                   physics: BouncingScrollPhysics(),
                   slivers: <Widget>[
                     SliverAppBar(
-                      // brightness: Brightness.dark,
+                      brightness: Brightness.light,
                       elevation: 0.0,
                       backgroundColor: Colors.transparent,
                       floating: true,
                       pinned: false,
                       snap: false,
-                      // shadowColor: Color(0xff6C5B7B),
                       actions: [
                         IconButton(
                           icon: Icon(
@@ -331,7 +331,6 @@ Are you sure you want to delete this playlist?
                           ),
                           onPressed: () async {
                             await musicDB.listTables();
-                            // Do something
                           },
                         ),
                         IconButton(
@@ -343,24 +342,29 @@ Are you sure you want to delete this playlist?
                             Get.to(PickDL(
                               notifyList: refreshme,
                             ));
-                            // Do something
                           },
                         ),
                       ],
                       flexibleSpace: FlexibleSpaceBar(
-                        centerTitle: true,
-                        title: Text(
-                          "Play G!",
-                          style: GoogleFonts.dmSans(
-                            fontSize: 25,
-                            color: Colors.white,
-                            fontWeight: FontWeight.w500,
+                        stretchModes: const <StretchMode>[
+                          StretchMode.zoomBackground,
+                          StretchMode.blurBackground,
+                        ],
+                        background: Container(
+                          child: Center(
+                            child: Padding(
+                              padding: const EdgeInsets.only(top: 58.0),
+                              child: Text(
+                                "Play G!",
+                                style: GoogleFonts.dmSans(
+                                  fontSize: 40,
+                                  color: Colors.white,
+                                  fontWeight: FontWeight.w500,
+                                ),
+                              ),
+                            ),
                           ),
                         ),
-                        // background: Image.network(
-                        //   'https://t3.ftcdn.net/jpg/02/43/28/42/360_F_243284276_pSwURDLR5G6PNqQpej1FEpZNZwFMLkn0.jpg',
-                        //   fit: BoxFit.cover,
-                        // ),
                       ),
                       expandedHeight: 100,
                     ),
@@ -379,7 +383,7 @@ Are you sure you want to delete this playlist?
                                         padding: const EdgeInsets.only(left: 30.0, top: 18),
                                         child: Text(
                                           "Recently Added",
-                                          style: GoogleFonts.poppins(
+                                          style: GoogleFonts.dmSans(
                                             fontSize: 25,
                                             color: Colors.white,
                                             fontWeight: FontWeight.w500,
@@ -412,8 +416,11 @@ Are you sure you want to delete this playlist?
                                               bottomOffsetHeight: 80.0, // Offset height to consider, for showing the menu item ( for example bottom navigation bar), so that the popup menu will be shown on top of selected item.
                                               menuItems: <FocusedMenuItem>[
                                                 FocusedMenuItem(
-                                                    title: Text("Play"),
-                                                    trailingIcon: Icon(Icons.play_arrow),
+                                                    title: Text(
+                                                      "Play",
+                                                      style: TextStyle(color: Colors.black),
+                                                    ),
+                                                    trailingIcon: Icon(Icons.play_arrow, color: Colors.black),
                                                     onPressed: () async {
                                                       SingleAudio.fromwhere = '';
                                                       setState(() {
@@ -427,14 +434,12 @@ Are you sure you want to delete this playlist?
                                                       widget.playlist();
                                                     }),
                                                 FocusedMenuItem(
-                                                  title: Text("Add to Queue"),
-                                                  trailingIcon: Icon(Icons.queue_play_next_sharp),
+                                                  title: Text(
+                                                    "Add to Queue",
+                                                    style: TextStyle(color: Colors.black),
+                                                  ),
+                                                  trailingIcon: Icon(Icons.queue_play_next_sharp, color: Colors.black),
                                                   onPressed: () {
-                                                    // var toSave = snapshot.data[snapshot.data.length - index - 1].pathList.toString();
-                                                    // var toSaveThumb = snapshot.data[snapshot.data.length - index - 1].thumbnailList.toString();
-                                                    // var title = snapshot.data[snapshot.data.length - index - 1].titleList.toString();
-                                                    // print(toSaveThumb);
-                                                    // Get.to(AddToPlaylist(trackName: toSave, title: title, thumbnail: toSaveThumb));
                                                     SingleAudio.fromwhere = '';
                                                     setState(() {
                                                       SingleAudio.singlePath = snapshot.data[snapshot.data.length - index - 1].pathList.toString();
@@ -451,9 +456,9 @@ Are you sure you want to delete this playlist?
                                                           return AlertDialog(
                                                             content: Text(
                                                               'Added to queue!',
-                                                              style: GoogleFonts.poppins(
+                                                              style: GoogleFonts.dmSans(
                                                                 // fontSize: 13,
-                                                                color: Colors.black,
+                                                                color: Colors.white,
                                                                 fontWeight: FontWeight.w500,
                                                               ),
                                                             ),
@@ -462,8 +467,11 @@ Are you sure you want to delete this playlist?
                                                   },
                                                 ),
                                                 FocusedMenuItem(
-                                                  title: Text("Add to Playlist"),
-                                                  trailingIcon: Icon(Icons.playlist_add_check),
+                                                  title: Text(
+                                                    "Add to Playlist",
+                                                    style: TextStyle(color: Colors.black),
+                                                  ),
+                                                  trailingIcon: Icon(Icons.playlist_add_check, color: Colors.black),
                                                   onPressed: () {
                                                     var toSave = snapshot.data[snapshot.data.length - index - 1].pathList.toString();
                                                     var toSaveThumb = snapshot.data[snapshot.data.length - index - 1].thumbnailList.toString();
@@ -473,8 +481,11 @@ Are you sure you want to delete this playlist?
                                                   },
                                                 ),
                                                 FocusedMenuItem(
-                                                  title: Text("Edit"),
-                                                  trailingIcon: Icon(Icons.edit_outlined),
+                                                  title: Text(
+                                                    "Edit",
+                                                    style: TextStyle(color: Colors.black),
+                                                  ),
+                                                  trailingIcon: Icon(Icons.edit_outlined, color: Colors.black),
                                                   onPressed: () {
                                                     Get.to(EditInfo(
                                                       pathList: snapshot.data[snapshot.data.length - index - 1].pathList.toString(),
@@ -496,10 +507,6 @@ Are you sure you want to delete this playlist?
                                                       color: Colors.redAccent,
                                                     ),
                                                     onPressed: () async {
-                                                      // await musicDB.deleteMemo(snapshot.data[snapshot.data.length - index - 1].pathList.toString());
-                                                      // setState(() {
-                                                      //   _myData = fetchEmployeesFromDatabase();
-                                                      // });
                                                       showAlertDialog(context, snapshot.data[snapshot.data.length - index - 1].pathList.toString());
                                                     }),
                                               ],
@@ -564,7 +571,7 @@ Are you sure you want to delete this playlist?
                                                               maxFontSize: 14,
                                                               minFontSize: 14,
                                                               overflow: TextOverflow.ellipsis,
-                                                              style: GoogleFonts.poppins(
+                                                              style: GoogleFonts.dmSans(
                                                                 fontWeight: FontWeight.w500,
                                                                 color: Colors.white,
                                                               ),
@@ -582,21 +589,11 @@ Are you sure you want to delete this playlist?
                                             autoPlay: false,
                                             enableInfiniteScroll: snapshot.data.length < 3 ? false : true,
                                             enlargeCenterPage: true,
-                                            // viewportFraction: 0.9,
-                                            // aspectRatio: 2.0,
                                             initialPage: 0,
-                                            // height: 500,
                                             aspectRatio: 2.0,
                                             viewportFraction: 0.7,
                                           ),
                                         );
-                                        // return ListView.builder(
-                                        //   scrollDirection: Axis.horizontal,
-                                        //   itemCount: snapshot.data.length,
-                                        //   itemBuilder: (_, index) {
-
-                                        //   },
-                                        // );
                                       } else if (snapshot.hasError) {
                                         return new Text("${snapshot.error}");
                                       } else if (snapshot.isBlank) {
@@ -627,7 +624,7 @@ Are you sure you want to delete this playlist?
                                             ),
                                             child: Text(
                                               "All Songs",
-                                              style: GoogleFonts.poppins(
+                                              style: GoogleFonts.dmSans(
                                                 fontSize: 25,
                                                 color: Colors.white,
                                                 fontWeight: FontWeight.w500,
@@ -717,8 +714,11 @@ Are you sure you want to delete this playlist?
                                                 bottomOffsetHeight: 80.0, // Offset height to consider, for showing the menu item ( for example bottom navigation bar), so that the popup menu will be shown on top of selected item.
                                                 menuItems: <FocusedMenuItem>[
                                                   FocusedMenuItem(
-                                                      title: Text("Play"),
-                                                      trailingIcon: Icon(Icons.play_arrow),
+                                                      title: Text(
+                                                        "Play",
+                                                        style: TextStyle(color: Colors.black),
+                                                      ),
+                                                      trailingIcon: Icon(Icons.play_arrow, color: Colors.black),
                                                       onPressed: () async {
                                                         SingleAudio.fromwhere = '';
                                                         audios.clear();
@@ -745,14 +745,12 @@ Are you sure you want to delete this playlist?
                                                         });
                                                       }),
                                                   FocusedMenuItem(
-                                                    title: Text("Add to Queue"),
-                                                    trailingIcon: Icon(Icons.queue_play_next_sharp),
+                                                    title: Text(
+                                                      "Add to Queue",
+                                                      style: TextStyle(color: Colors.black),
+                                                    ),
+                                                    trailingIcon: Icon(Icons.queue_play_next_sharp, color: Colors.black),
                                                     onPressed: () {
-                                                      // var toSave = snapshot.data[snapshot.data.length - index - 1].pathList.toString();
-                                                      // var toSaveThumb = snapshot.data[snapshot.data.length - index - 1].thumbnailList.toString();
-                                                      // var title = snapshot.data[snapshot.data.length - index - 1].titleList.toString();
-                                                      // print(toSaveThumb);
-                                                      // Get.to(AddToPlaylist(trackName: toSave, title: title, thumbnail: toSaveThumb));
                                                       SingleAudio.fromwhere = '';
                                                       setState(() {
                                                         SingleAudio.singlePath = snapshot.data[snapshot.data.length - index - 1].pathList.toString();
@@ -769,9 +767,8 @@ Are you sure you want to delete this playlist?
                                                             return AlertDialog(
                                                               content: Text(
                                                                 'Added to queue!',
-                                                                style: GoogleFonts.poppins(
-                                                                  // fontSize: 13,
-                                                                  color: Colors.black,
+                                                                style: GoogleFonts.dmSans(
+                                                                  color: Colors.white,
                                                                   fontWeight: FontWeight.w500,
                                                                 ),
                                                               ),
@@ -780,8 +777,11 @@ Are you sure you want to delete this playlist?
                                                     },
                                                   ),
                                                   FocusedMenuItem(
-                                                    title: Text("Add to Playlist"),
-                                                    trailingIcon: Icon(Icons.playlist_add_check),
+                                                    title: Text(
+                                                      "Add to Playlist",
+                                                      style: TextStyle(color: Colors.black),
+                                                    ),
+                                                    trailingIcon: Icon(Icons.playlist_add_check, color: Colors.black),
                                                     onPressed: () {
                                                       var toSave = snapshot.data[snapshot.data.length - index - 1].pathList.toString();
                                                       var toSaveThumb = snapshot.data[snapshot.data.length - index - 1].thumbnailList.toString();
@@ -796,8 +796,14 @@ Are you sure you want to delete this playlist?
                                                     },
                                                   ),
                                                   FocusedMenuItem(
-                                                    title: Text("Edit"),
-                                                    trailingIcon: Icon(Icons.edit_outlined),
+                                                    title: Text(
+                                                      "Edit",
+                                                      style: TextStyle(color: Colors.black),
+                                                    ),
+                                                    trailingIcon: Icon(
+                                                      Icons.edit_outlined,
+                                                      color: Colors.black,
+                                                    ),
                                                     onPressed: () {
                                                       Get.to(EditInfo(
                                                         pathList: snapshot.data[snapshot.data.length - index - 1].pathList.toString(),
@@ -819,24 +825,10 @@ Are you sure you want to delete this playlist?
                                                         color: Colors.redAccent,
                                                       ),
                                                       onPressed: () async {
-                                                        // await musicDB.deleteMemo(snapshot.data[snapshot.data.length - index - 1].pathList.toString());
-                                                        // setState(() {
-                                                        //   _myData = fetchEmployeesFromDatabase();
-                                                        // });
                                                         showAlertDialog(context, snapshot.data[snapshot.data.length - index - 1].pathList.toString());
                                                       }),
                                                 ],
-                                                onPressed: () {
-                                                  // setState(() {
-                                                  //   SingleAudio.singlePath = snapshot.data[snapshot.data.length - index - 1].pathList.toString();
-                                                  //   SingleAudio.title = snapshot.data[snapshot.data.length - index - 1].titleList.toString();
-                                                  //   SingleAudio.artist = snapshot.data[snapshot.data.length - index - 1].authornameList.toString();
-                                                  //   SingleAudio.image = snapshot.data[snapshot.data.length - index - 1].thumbnailList.toString();
-                                                  //   SingleAudio.album = 'from YT';
-                                                  //   SingleAudio.fromwhere = 'solo';
-                                                  // });
-                                                  // widget.playlist();
-                                                },
+                                                onPressed: () {},
 
                                                 child: Column(
                                                   children: <Widget>[
@@ -845,7 +837,7 @@ Are you sure you want to delete this playlist?
                                                       child: Container(
                                                         height: 70,
                                                         decoration: BoxDecoration(
-                                                          // color: Colors.white,.
+                                                          // color: Colors.white,
                                                           color: Colors.white.withOpacity(0.2),
                                                         ),
                                                         child: ListTile(
@@ -869,7 +861,7 @@ Are you sure you want to delete this playlist?
                                                               maxFontSize: 18,
                                                               minFontSize: 18,
                                                               overflow: TextOverflow.ellipsis,
-                                                              style: GoogleFonts.poppins(
+                                                              style: GoogleFonts.dmSans(
                                                                 fontWeight: FontWeight.w500,
                                                                 color: Colors.white,
                                                               ),
@@ -886,7 +878,7 @@ Are you sure you want to delete this playlist?
                                                                     maxFontSize: 12,
                                                                     minFontSize: 12,
                                                                     overflow: TextOverflow.ellipsis,
-                                                                    style: GoogleFonts.poppins(
+                                                                    style: GoogleFonts.dmSans(
                                                                       fontWeight: FontWeight.w500,
                                                                       color: Colors.white,
                                                                     ),
@@ -958,7 +950,7 @@ Are you sure you want to delete this playlist?
                                               ),
                                               child: Text(
                                                 "Playlists",
-                                                style: GoogleFonts.poppins(
+                                                style: GoogleFonts.dmSans(
                                                   fontSize: 25,
                                                   color: Colors.white,
                                                   fontWeight: FontWeight.w500,
@@ -994,9 +986,9 @@ Are you sure you want to delete this playlist?
                                                                 decoration: BoxDecoration(
                                                                   gradient: new LinearGradient(
                                                                       colors: [
-                                                                        Color(0xffC06C84),
-                                                                        Color(0xff355C7D),
-                                                                        Color(0xff6C5B7B),
+                                                                        Theme.of(context).colorScheme.primary,
+                                                                        Theme.of(context).colorScheme.secondary,
+                                                                        Theme.of(context).colorScheme.primaryVariant,
                                                                       ],
                                                                       begin: const FractionalOffset(0.0, 0.0),
                                                                       end: const FractionalOffset(1.0, 1.0),
@@ -1021,7 +1013,7 @@ Are you sure you want to delete this playlist?
                                                                             children: [
                                                                               Text(
                                                                                 "Create Playlist",
-                                                                                style: GoogleFonts.poppins(
+                                                                                style: GoogleFonts.dmSans(
                                                                                   fontSize: 30,
                                                                                   color: Colors.white,
                                                                                   fontWeight: FontWeight.w500,
@@ -1042,7 +1034,6 @@ Are you sure you want to delete this playlist?
                                                                         height: 180,
                                                                         child: TextField(
                                                                           style: TextStyle(color: Colors.white),
-                                                                          // maxLength: 15,
                                                                           controller: _playlistTextController,
                                                                           decoration: InputDecoration(
                                                                             counterText: '',
@@ -1104,7 +1095,6 @@ Are you sure you want to delete this playlist?
                                                                                 } else {
                                                                                   await musicDB.addPlaylist(memo).then((value) {
                                                                                     Get.back();
-                                                                                    // _buttonController.reset();
                                                                                     setState(() {
                                                                                       _myPlaylist = getPlaylistfromDB();
                                                                                       _playlistTextController.text = '';
@@ -1167,10 +1157,6 @@ Are you sure you want to delete this playlist?
 
                                             Future<List<AddPlaylistModel>> _myCheck = (getSongsPlaylist(snapshot.data[snapshot.data.length - index - 1].playlistName.toString()));
                                             return Container(
-                                              // margin: EdgeInsets.only(left: 16, right: 16),
-                                              // width: 180,
-                                              // height: 200,
-                                              // color: Colors.green,
                                               child: Stack(
                                                 children: [
                                                   Padding(
@@ -1190,8 +1176,11 @@ Are you sure you want to delete this playlist?
                                                           // openWithTap: true,
                                                           menuItems: <FocusedMenuItem>[
                                                             FocusedMenuItem(
-                                                                title: Text("Play Playlist"),
-                                                                trailingIcon: Icon(Icons.play_arrow),
+                                                                title: Text(
+                                                                  "Play Playlist",
+                                                                  style: TextStyle(color: Colors.black),
+                                                                ),
+                                                                trailingIcon: Icon(Icons.play_arrow, color: Colors.black),
                                                                 onPressed: () async {
                                                                   SingleAudio.fromwhere = '';
                                                                   List<String> path = [];
@@ -1227,13 +1216,15 @@ Are you sure you want to delete this playlist?
                                                                   });
                                                                 }),
                                                             FocusedMenuItem(
-                                                              title: Text("Add / Edit Songs"),
-                                                              trailingIcon: Icon(Icons.edit_outlined),
+                                                              title: Text(
+                                                                "Add / Edit Songs",
+                                                                style: TextStyle(color: Colors.black),
+                                                              ),
+                                                              trailingIcon: Icon(Icons.edit_outlined, color: Colors.black),
                                                               onPressed: () async {
                                                                 Get.to(ScreenTwo(playlistName: snapshot.data[snapshot.data.length - index - 1].playlistName.toString(), check: refresh));
                                                               },
                                                             ),
-                                                            // FocusedMenuItem(title: Text("Favorite"), trailingIcon: Icon(Icons.favorite_border), onPressed: () {}),
                                                             FocusedMenuItem(
                                                                 title: Text(
                                                                   "Delete",
@@ -1281,100 +1272,7 @@ Are you sure you want to delete this playlist?
                                                               widget.callback(audios);
                                                             });
                                                           },
-                                                          // child: Container(
-                                                          //   width: 200,
-                                                          //   height: 224,
-                                                          //   // margin: EdgeInsets.only(left: 8, right: 8),
-                                                          //   child: Center(
-                                                          //     child: Stack(
-                                                          //       children: [
-                                                          //         Container(
-                                                          //           width: 200,
-                                                          //           height: 224,
-                                                          //           child: FutureBuilder<List<AddPlaylistModel>>(
-                                                          //             future: _myCheck,
-                                                          //             builder: (context, snapshotx) {
-                                                          //               if (snapshotx.hasData) {
-                                                          //                 return GridView.builder(
-                                                          //                   gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: 2),
-                                                          //                   itemCount: snapshotx.data.length,
-                                                          //                   physics: NeverScrollableScrollPhysics(),
-                                                          //                   itemBuilder: (BuildContext context, int index) {
-                                                          //                     // return Card(
-                                                          //                     //   color: Colors.green,
-                                                          //                     //   child:
-                                                          //                     // );
-                                                          //                     return Container(
-                                                          //                       width: 200,
-                                                          //                       height: 80,
-                                                          //                       decoration: BoxDecoration(
-                                                          //                         shape: BoxShape.rectangle,
-                                                          //                         borderRadius: BorderRadius.all(Radius.circular(30)),
-                                                          //                         color: Colors.transparent,
-                                                          //                         boxShadow: [BoxShadow(color: Colors.black.withOpacity(.2), blurRadius: 10, spreadRadius: 5)],
-                                                          //                       ),
-                                                          //                       child: Image.file(
-                                                          //                         File(
-                                                          //                           appDocDir.uri.toFilePath().toString() + snapshotx.data[index].thumbnailList.toString(),
-                                                          //                         ),
-                                                          //                         fit: BoxFit.cover,
-                                                          //                       ),
-                                                          //                     );
-                                                          //                   },
-                                                          //                 );
-                                                          //               }
-                                                          //               return Container();
-                                                          //             },
-                                                          //           ),
-                                                          //         ),
-                                                          //         Align(
-                                                          //           alignment: Alignment.center,
-                                                          //           child: Column(
-                                                          //             mainAxisSize: MainAxisSize.min,
-                                                          //             children: [
-                                                          //               Padding(
-                                                          //                 padding: const EdgeInsets.only(left: 18.0, right: 8, bottom: 28, top: 35),
-                                                          //                 child: Icon(
-                                                          //                   Icons.play_arrow,
-                                                          //                   size: 60,
-                                                          //                   color: Colors.white.withOpacity(0.2),
-                                                          //                 ),
-                                                          //               ),
-                                                          //             ],
-                                                          //           ),
-                                                          //         ),
-                                                          //         Align(
-                                                          //           alignment: Alignment.bottomCenter,
-                                                          //           child: Padding(
-                                                          //             padding: const EdgeInsets.all(8.0),
-                                                          //             child: Container(
-                                                          //               color: Colors.black.withOpacity(.6),
-                                                          //               child: Column(
-                                                          //                 mainAxisSize: MainAxisSize.min,
-                                                          //                 children: [
-                                                          //                   Padding(
-                                                          //                     padding: const EdgeInsets.only(left: 8.0, right: 8, bottom: 0),
-                                                          //                     child: AutoSizeText(
-                                                          //                       snapshot.data[snapshot.data.length - index - 1].playlistName.toString(),
-                                                          //                       maxLines: 1,
-                                                          //                       maxFontSize: 14,
-                                                          //                       minFontSize: 14,
-                                                          //                       overflow: TextOverflow.ellipsis,
-                                                          //                       style: GoogleFonts.poppins(
-                                                          //                         fontWeight: FontWeight.w500,
-                                                          //                         color: Colors.white,
-                                                          //                       ),
-                                                          //                     ),
-                                                          //                   ),
-                                                          //                 ],
-                                                          //               ),
-                                                          //             ),
-                                                          //           ),
-                                                          //         ),
-                                                          //       ],
-                                                          //     ),
-                                                          //   ),
-                                                          // ),
+
                                                           child: Container(
                                                             margin: EdgeInsets.only(left: 0, right: 0),
                                                             width: 250,
@@ -1390,8 +1288,6 @@ Are you sure you want to delete this playlist?
                                                                       child: Stack(
                                                                         children: [
                                                                           Container(
-                                                                            // width: 250,
-                                                                            // height: 250,
                                                                             child: FutureBuilder<List<AddPlaylistModel>>(
                                                                               future: _myCheck,
                                                                               builder: (context, snapshotx) {
@@ -1402,14 +1298,6 @@ Are you sure you want to delete this playlist?
                                                                                     itemCount: snapshotx.data.length,
                                                                                     itemBuilder: (BuildContext context, int index) {
                                                                                       return Container(
-                                                                                        // width: 200,
-                                                                                        // height: 0,
-                                                                                        // decoration: BoxDecoration(
-                                                                                        //   shape: BoxShape.rectangle,
-                                                                                        //   borderRadius: BorderRadius.all(Radius.circular(30)),
-                                                                                        //   color: Colors.transparent,
-                                                                                        //   boxShadow: [BoxShadow(color: Colors.black.withOpacity(.2), blurRadius: 10, spreadRadius: 5)],
-                                                                                        // ),
                                                                                         child: Image.file(
                                                                                           File(
                                                                                             appDocDir.uri.toFilePath().toString() + snapshotx.data[snapshotx.data.length - index - 1].thumbnailList.toString(),
@@ -1457,7 +1345,7 @@ Are you sure you want to delete this playlist?
                                                                                         maxFontSize: 14,
                                                                                         minFontSize: 14,
                                                                                         overflow: TextOverflow.ellipsis,
-                                                                                        style: GoogleFonts.poppins(
+                                                                                        style: GoogleFonts.dmSans(
                                                                                           fontWeight: FontWeight.w500,
                                                                                           color: Colors.white,
                                                                                         ),
@@ -1504,7 +1392,6 @@ Are you sure you want to delete this playlist?
                             ),
                           );
                         },
-                        // Builds 1000 ListTiles
                         childCount: 1,
                       ),
                     )

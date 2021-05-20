@@ -56,9 +56,9 @@ class _AllSongsState extends State<AllSongs> {
         decoration: BoxDecoration(
           gradient: new LinearGradient(
               colors: [
-                Color(0xffC06C84),
-                Color(0xff355C7D),
-                Color(0xff6C5B7B),
+                Theme.of(context).colorScheme.primary,
+                Theme.of(context).colorScheme.secondary,
+                Theme.of(context).colorScheme.primaryVariant,
               ],
               begin: const FractionalOffset(0.0, 0.0),
               end: const FractionalOffset(1.0, 1.0),

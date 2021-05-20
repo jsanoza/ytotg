@@ -441,9 +441,9 @@ Please double check.
               decoration: BoxDecoration(
                 gradient: new LinearGradient(
                     colors: [
-                      Color(0xffC06C84),
-                      Color(0xff355C7D),
-                      Color(0xff6C5B7B),
+                      Theme.of(context).colorScheme.primary,
+                      Theme.of(context).colorScheme.secondary,
+                      Theme.of(context).colorScheme.primaryVariant,
                     ],
                     begin: const FractionalOffset(0.0, 0.0),
                     end: const FractionalOffset(1.0, 1.0),
@@ -475,7 +475,7 @@ Please double check.
               child: Column(
                 children: [
                   Padding(
-                    padding: const EdgeInsets.only(top: 120.0),
+                    padding: const EdgeInsets.only(top: 119.0),
                     child: Container(
                       width: 200,
                       height: 200,
@@ -611,7 +611,7 @@ Please double check.
                         // ),
                         Focus(
                             child: Container(
-                              height: 40,
+                              height: 39,
                               width: 70,
                               child: TextField(
                                 style: GoogleFonts.poppins(
@@ -722,7 +722,7 @@ Please double check.
                         // ),
                         Focus(
                             child: Container(
-                              height: 40,
+                              height: 39,
                               width: 70,
                               child: TextField(
                                 style: GoogleFonts.poppins(
@@ -831,7 +831,7 @@ Please double check.
               ),
             ),
             Padding(
-              padding: const EdgeInsets.only(top: 470.0),
+              padding: const EdgeInsets.only(top: 469.0),
               child: Container(
                 height: 50,
                 width: Get.width,
@@ -899,7 +899,7 @@ Please double check.
               ),
             ),
             Padding(
-              padding: const EdgeInsets.only(top: 530.0),
+              padding: const EdgeInsets.only(top: 531.0),
               child: Container(
                 height: 150,
                 width: Get.width,

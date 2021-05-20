@@ -49,146 +49,6 @@ class _PickDLState extends State<PickDL> {
 
   MemoDbProvider musicDB = MemoDbProvider();
   final FlutterFFmpeg _flutterFFmpeg = new FlutterFFmpeg();
-
-  // Future<dynamic> getDetail(String userUrl) async {
-  //   // Uri.parse('https://swapi.co/api/people')
-  //   String embedUrl = "https://www.youtube.com/oembed?url=$userUrl&format=json";
-  //   var res = await http.get(Uri.parse(embedUrl));
-  //   print("get youtube detail status code: " + res.statusCode.toString());
-
-  //   try {
-  //     if (res.statusCode == 200) {
-  //       return json.decode(res.body);
-  //     } else {
-  //       return null;
-  //     }
-  //   } on FormatException catch (e) {
-  //     print('invalid JSON' + e.toString());
-  //     return null;
-  //   }
-  // }
-
-  // _changeurl(String url) async {
-  //   // url.replaceAll('m.', 'www.');
-  //   var jsonData;
-  //   var split = url.substring(10);
-  //   var finalurl = 'https://www.' + split;
-  //   if (finalurl.length > 43) {
-  //     finalurl = finalurl.substring(0, 43);
-  //     jsonData = await getDetail(finalurl);
-  //     String title = jsonData['title'];
-  //     String authorname = jsonData['author_name'];
-  //     String thumbnail = jsonData['thumbnail_url'];
-
-  //     urlList.add(url);
-  //     titleList.add(title);
-  //     authorList.add(authorname);
-  //     thumbList.add(thumbnail);
-
-  //     _urlList.add(url);
-  //     _titleList.add(title);
-  //     _authorList.add(authorname);
-  //     _thumbList.add(thumbnail);
-  //     // YTList.titleList = titleList;
-  //     // YTList.urlList = urlList;
-  //     // YTList.authorList = authorList;
-  //     // YTList.thumbList = thumbList;
-
-  //     print(title + ' ' + authorname + ' ' + thumbnail);
-  //   } else {
-  //     finalurl = finalurl;
-  //     jsonData = await getDetail(finalurl);
-  //     String title = jsonData['title'];
-  //     String authorname = jsonData['author_name'];
-  //     String thumbnail = jsonData['thumbnail_url'];
-
-  //     urlList.add(url);
-  //     titleList.add(title);
-  //     authorList.add(authorname);
-  //     thumbList.add(thumbnail);
-
-  //     _urlList.add(url);
-  //     _titleList.add(title);
-  //     _authorList.add(authorname);
-  //     _thumbList.add(thumbnail);
-
-  //     // YTList.titleList = titleList;
-  //     // YTList.urlList = urlList;
-  //     // YTList.authorList = authorList;
-  //     // YTList.thumbList = thumbList;
-
-  //     print(title + ' ' + authorname + ' ' + thumbnail);
-  //   }
-  // }
-
-  // _bookmarkButton() {
-  //   return FutureBuilder<WebViewController>(
-  //     future: _controller.future,
-  //     builder: (BuildContext context, AsyncSnapshot<WebViewController> controller) {
-  //       if (controller.hasData) {
-  //         return FloatingActionButton(
-  //           splashColor: Colors.white,
-  //           backgroundColor: Color(0xffC06C84),
-  //           onPressed: () async {
-  //             var url = await controller.data.currentUrl();
-  //             // if (url.length > 43) {
-  //             //   print(url.substring(41, 46));
-  //             //   checkiflist = url.substring(41, 46);
-  //             //   if (checkiflist == '&list') {
-  //             //     if (urlList.contains(url)) {
-  //             //       ScaffoldMessenger.of(context).showSnackBar(
-  //             //         SnackBar(
-  //             //           content: Text('Selected video is already on the list.'),
-  //             //         ),
-  //             //       );
-  //             //     } else {
-  //             //       // _changeurl(url);
-  //             //       ScaffoldMessenger.of(context).showSnackBar(
-  //             //         SnackBar(
-  //             //           content: Text('Added to your download list.'),
-  //             //         ),
-  //             //       );
-  //             //     }
-  //             //   } else {
-  //             //     // ScaffoldMessenger.of(context).showSnackBar(
-  //             //     //   SnackBar(
-  //             //     //     content: Text('Please select a video.'),
-  //             //     //   ),
-  //             //     // );
-  //             //   }
-  //             // } else {
-  //             //   if (url.length == 22) {
-  //             //     ScaffoldMessenger.of(context).showSnackBar(
-  //             //       SnackBar(
-  //             //         content: Text('Please select a video.'),
-  //             //       ),
-  //             //     );
-  //             //   } else {
-  //             //     // if (urlList.contains(url)) {
-  //             //     //   ScaffoldMessenger.of(context).showSnackBar(
-  //             //     //     SnackBar(
-  //             //     //       content: Text('Selected video is already on the list.'),
-  //             //     //     ),
-  //             //     //   );
-  //             //     // } else {
-  //             //     //   _changeurl(url);
-  //             //     //   ScaffoldMessenger.of(context).showSnackBar(
-  //             //     //     SnackBar(
-  //             //     //       content: Text('Added to your download list.'),
-  //             //     //     ),
-  //             //     //   );
-  //             //     // }
-  //             //   }
-  //             // }
-  //           },
-  //           child: Icon(Icons.favorite),
-  //         );
-  //       }
-  //       return Container();
-  //     },
-  //   );
-  // }
-
   _anotherBookmark() {
     return FutureBuilder<WebViewController>(
       future: _controller.future,
@@ -196,17 +56,12 @@ class _PickDLState extends State<PickDL> {
         if (controller.hasData) {
           return FloatingActionButton(
             splashColor: Colors.white,
-            backgroundColor: Color(0xffC06C84),
+            backgroundColor: Theme.of(context).colorScheme.primary,
             onPressed: () async {
               var url = await controller.data.currentUrl();
               print(url);
 
               if (url.length == 22) {
-                // ScaffoldMessenger.of(context).showSnackBar(
-                //   SnackBar(
-                //     content: Text('Empty'),
-                //   ),
-                // );
                 showDialog(
                     context: context,
                     builder: (context) {
@@ -217,11 +72,6 @@ class _PickDLState extends State<PickDL> {
               }
 
               if (url == 'https://m.youtube.com/channel/UC-9-kyTW8ZkZNDHQJ6FgpwQ') {
-                // ScaffoldMessenger.of(context).showSnackBar(
-                //   SnackBar(
-                //     content: Text('Invalid Video'),
-                //   ),
-                // );
                 showDialog(
                     context: context,
                     builder: (context) {
@@ -237,11 +87,6 @@ class _PickDLState extends State<PickDL> {
                 var check = await musicDB.getcount(url.toString());
 
                 if (check.toString() == '1') {
-                  // ScaffoldMessenger.of(context).showSnackBar(
-                  //   SnackBar(
-                  //     content: Text('Video is already downloaded on this phone.'),
-                  //   ),
-                  // );
                   showDialog(
                       context: context,
                       builder: (context) {
@@ -260,11 +105,6 @@ class _PickDLState extends State<PickDL> {
                   _authorList.add(playlist.author);
                   _thumbList.add(playlist.thumbnails.highResUrl);
 
-                  // ScaffoldMessenger.of(context).showSnackBar(
-                  //   SnackBar(
-                  //     content: Text('Video added to download list.'),
-                  //   ),
-                  // );
                   showDialog(
                       context: context,
                       builder: (context) {
@@ -288,11 +128,7 @@ class _PickDLState extends State<PickDL> {
 
                   if (check.toString() == '1') {
                     print(videoUrl.toString());
-                    // ScaffoldMessenger.of(context).showSnackBar(
-                    //   SnackBar(
-                    //     content: Text('$videoTitle is already downloaded on this phone. Therefore deleting it on the download list.'),
-                    //   ),
-                    // );
+
                     showDialog(
                         context: context,
                         builder: (context) {
@@ -315,11 +151,7 @@ class _PickDLState extends State<PickDL> {
                     }
                   }
                 }
-                // ScaffoldMessenger.of(context).showSnackBar(
-                //   SnackBar(
-                //     content: Text('Videos added to download list.'),
-                //   ),
-                // );
+
                 showDialog(
                     context: context,
                     builder: (context) {
@@ -336,17 +168,6 @@ class _PickDLState extends State<PickDL> {
       },
     );
   }
-
-  // checkmesenpai() async {
-  //   var check = await musicDB.getcount('https://m.youtube.com/watch?v=tQ0yjYUFKAE');
-  //   print("THIS IS IT WE FOUND IT OUR MISSION IS DONE" + check.toString());
-  //   // for (var i = 0; i < urlList.length; i++) {
-  //   //   var check = await musicDB.getcount(urlList[i].toString());
-  //   //   if (check.toString() == '1') {
-  //   //     print("THIS IS IT WE FOUND IT OUR MISSION IS DONE" + urlList[i].toString());
-  //   //   }
-  //   // }
-  // }
 
   Future<void> deleteFile(File file) async {
     try {
@@ -375,20 +196,8 @@ class _PickDLState extends State<PickDL> {
       var manifest = await yt.videos.streamsClient.getManifest(id);
       var audio = manifest.audioOnly.last;
       Directory appDocDir = await getApplicationDocumentsDirectory();
-      var tempTitle =
-          '${titleList[i]}'.replaceAll(r'\', '').replaceAll('/', '').replaceAll('*', '').replaceAll('?', '').replaceAll('"', '').replaceAll('<', '').replaceAll('>', '').replaceAll('|', '').replaceAll('{', '').replaceAll('}', '').replaceAll('\'', '');
-      var tempPath = '${titleList[i]}.${audio.container.name}'
-          .replaceAll(r'\', '')
-          .replaceAll('/', '')
-          .replaceAll('*', '')
-          .replaceAll('?', '')
-          .replaceAll('"', '')
-          .replaceAll('<', '')
-          .replaceAll('>', '')
-          .replaceAll('|', '')
-          .replaceAll('{', '')
-          .replaceAll('}', '')
-          .replaceAll('\'', '');
+      var tempTitle = '${titleList[i]}'.replaceAll(r'\', '').replaceAll('/', '').replaceAll('*', '').replaceAll('?', '').replaceAll('"', '').replaceAll('<', '').replaceAll('>', '').replaceAll('|', '').replaceAll('{', '').replaceAll('}', '').replaceAll('\'', '');
+      var tempPath = '${titleList[i]}.${audio.container.name}'.replaceAll(r'\', '').replaceAll('/', '').replaceAll('*', '').replaceAll('?', '').replaceAll('"', '').replaceAll('<', '').replaceAll('>', '').replaceAll('|', '').replaceAll('{', '').replaceAll('}', '').replaceAll('\'', '');
       var filePath = path.join(appDocDir.uri.toFilePath(), tempPath);
 
       print(filePath.toString());
@@ -427,18 +236,7 @@ class _PickDLState extends State<PickDL> {
           titleList[i].replaceAll(r'\', '').replaceAll('/', '').replaceAll('*', '').replaceAll('?', '').replaceAll('"', '').replaceAll('<', '').replaceAll('>', '').replaceAll('|', '').replaceAll('{', '').replaceAll('}', '').replaceAll('\'', ''),
           authorList[i].replaceAll(r'\', '').replaceAll('/', '').replaceAll('*', '').replaceAll('?', '').replaceAll('"', '').replaceAll('<', '').replaceAll('>', '').replaceAll('|', '').replaceAll('{', '').replaceAll('}', '').replaceAll('\'', ''),
           '$split.jpg',
-          '${tempTitle}1.mp4'
-              .replaceAll(r'\', '')
-              .replaceAll('/', '')
-              .replaceAll('*', '')
-              .replaceAll('?', '')
-              .replaceAll('"', '')
-              .replaceAll('<', '')
-              .replaceAll('>', '')
-              .replaceAll('|', '')
-              .replaceAll('{', '')
-              .replaceAll('}', '')
-              .replaceAll('\'', ''),
+          '${tempTitle}1.mp4'.replaceAll(r'\', '').replaceAll('/', '').replaceAll('*', '').replaceAll('?', '').replaceAll('"', '').replaceAll('<', '').replaceAll('>', '').replaceAll('|', '').replaceAll('{', '').replaceAll('}', '').replaceAll('\'', ''),
         );
         await musicDB.addItem(memo);
 
@@ -508,9 +306,9 @@ class _PickDLState extends State<PickDL> {
                 decoration: BoxDecoration(
                   gradient: new LinearGradient(
                       colors: [
-                        Color(0xffC06C84),
-                        Color(0xff355C7D),
-                        Color(0xff6C5B7B),
+                        Theme.of(context).colorScheme.primary,
+                        Theme.of(context).colorScheme.secondary,
+                        Theme.of(context).colorScheme.primaryVariant,
                       ],
                       begin: const FractionalOffset(0.0, 0.0),
                       end: const FractionalOffset(1.0, 1.0),
@@ -549,24 +347,12 @@ class _PickDLState extends State<PickDL> {
                                         border: Border.all(color: Colors.white),
                                         borderRadius: BorderRadius.all(Radius.circular(90)),
                                         color: Colors.transparent,
-                                        // boxShadow: [BoxShadow(color: Colors.black.withOpacity(.2), blurRadius: 10, spreadRadius: 5)],
                                       ),
                                       child: CircularProgressIndicator(
                                         valueColor: AlwaysStoppedAnimation<Color>(Color(0xffC06C84)),
                                         backgroundColor: Colors.white,
                                       ),
                                     ),
-                                    // IconButton(
-                                    //   icon: Icon(
-                                    //     Icons.download_sharp,
-                                    //     size: 20,
-                                    //     color: Colors.white,
-                                    //   ),
-                                    //   onPressed: () {
-                                    //     print("CLICKED DOWNLOAD");
-                                    //     // _downloadFunc();
-                                    //   },
-                                    // ),
                                     Center(child: Icon(Icons.download_sharp, color: Colors.white)),
                                   ],
                                 ),
@@ -595,49 +381,10 @@ class _PickDLState extends State<PickDL> {
                                     border: Border.all(color: Colors.white),
                                     borderRadius: BorderRadius.all(Radius.circular(90)),
                                     color: Colors.transparent,
-                                    // boxShadow: [BoxShadow(color: Colors.black.withOpacity(.2), blurRadius: 10, spreadRadius: 5)],
                                   ),
-                                  // child: IconButton(
-                                  //   icon: Icon(
-                                  //     Icons.download_sharp,
-                                  //     size: 20,
-                                  //     color: Colors.white,
-                                  //   ),
-                                  //   onPressed: () async {
-                                  //     print("CLICKED DOWNLOAD");
-
-                                  //     // setState(() {
-                                  //     //   _isDownloading = true;
-                                  //     // });
-                                  //     // _trySet();
-                                  //   },
-                                  // ),
                                   child: Icon(Icons.download_sharp, color: Colors.white),
                                 ),
                               ),
-                        // : Container(
-                        //     height: 40,
-                        //     width: 40,
-                        //     child: ElevatedButton(
-                        //         style: ButtonStyle(
-                        //           backgroundColor: MaterialStateProperty.all<Color>(Colors.transparent),
-                        //           shadowColor: MaterialStateProperty.all<Color>(Colors.transparent),
-                        //           shape: MaterialStateProperty.all<RoundedRectangleBorder>(
-                        //             RoundedRectangleBorder(
-                        //               borderRadius: BorderRadius.circular(90.0),
-                        //               side: BorderSide(color: Colors.white),
-                        //             ),
-                        //           ),
-                        //         ),
-                        //         onPressed: () async {
-                        //           // _assetsAudioPlayer.playOrPause();
-                        //         },
-                        //         child: Icon(
-                        //           Icons.pause,
-                        //           size: 20,
-                        //           color: Colors.white,
-                        //         )),
-                        //   ),
                       ],
                     ),
                   ],
@@ -659,9 +406,9 @@ class _PickDLState extends State<PickDL> {
                               decoration: BoxDecoration(
                                 gradient: new LinearGradient(
                                     colors: [
-                                      Color(0xffC06C84),
-                                      Color(0xff355C7D),
-                                      Color(0xff6C5B7B),
+                                      Theme.of(context).colorScheme.primary,
+                                      Theme.of(context).colorScheme.secondary,
+                                      Theme.of(context).colorScheme.primaryVariant,
                                     ],
                                     begin: const FractionalOffset(0.0, 0.0),
                                     end: const FractionalOffset(1.0, 1.0),
@@ -682,10 +429,6 @@ class _PickDLState extends State<PickDL> {
                                           child: Container(
                                             height: 70,
                                             decoration: BoxDecoration(
-                                              // shape: BoxShape.rectangle,
-                                              // borderRadius: BorderRadius.all(Radius.circular(10)),
-                                              // color: Colors.white,
-                                              // boxShadow: [BoxShadow(color: Colors.black.withOpacity(.2), blurRadius: 30, spreadRadius: 5)],
                                               color: Colors.white.withOpacity(0.2),
                                             ),
                                             child: ListTile(
@@ -782,9 +525,9 @@ class _PickDLState extends State<PickDL> {
                               decoration: BoxDecoration(
                                 gradient: new LinearGradient(
                                     colors: [
-                                      Color(0xffC06C84),
-                                      Color(0xff355C7D),
-                                      Color(0xff6C5B7B),
+                                      Theme.of(context).colorScheme.primary,
+                                      Theme.of(context).colorScheme.secondary,
+                                      Theme.of(context).colorScheme.primaryVariant,
                                     ],
                                     begin: const FractionalOffset(0.0, 0.0),
                                     end: const FractionalOffset(1.0, 1.0),
@@ -842,10 +585,6 @@ class _PickDLState extends State<PickDL> {
                                             child: Container(
                                               height: 70,
                                               decoration: BoxDecoration(
-                                                // shape: BoxShape.rectangle,
-                                                // borderRadius: BorderRadius.all(Radius.circular(10)),
-                                                // color: Colors.white,
-                                                // boxShadow: [BoxShadow(color: Colors.black.withOpacity(.2), blurRadius: 30, spreadRadius: 5)],
                                                 color: Colors.white.withOpacity(0.2),
                                               ),
                                               child: ListTile(
@@ -931,9 +670,9 @@ class _PickDLState extends State<PickDL> {
           decoration: BoxDecoration(
             gradient: new LinearGradient(
                 colors: [
-                  Color(0xffC06C84),
-                  Color(0xff355C7D),
-                  Color(0xff6C5B7B),
+                  Theme.of(context).colorScheme.primary,
+                  Theme.of(context).colorScheme.secondary,
+                  Theme.of(context).colorScheme.primaryVariant,
                 ],
                 begin: const FractionalOffset(0.0, 0.0),
                 end: const FractionalOffset(1.0, 1.0),
@@ -947,7 +686,6 @@ class _PickDLState extends State<PickDL> {
                   padding: const EdgeInsets.only(top: 20.0, left: 0, right: 0),
                   child: Container(
                     width: Get.width,
-                    // height: 160,
                     child: Column(
                       children: [
                         Container(
@@ -984,7 +722,6 @@ class _PickDLState extends State<PickDL> {
                                 GestureDetector(
                                   onTap: () {
                                     print("CLICKED DOWNLOAD");
-                                    // _downloadFunc();
                                     showGeneralDialog(
                                       barrierLabel: "Label",
                                       barrierDismissible: false,
@@ -1015,75 +752,13 @@ class _PickDLState extends State<PickDL> {
                                             border: Border.all(color: Colors.white),
                                             borderRadius: BorderRadius.all(Radius.circular(90)),
                                             color: Colors.transparent,
-                                            // boxShadow: [BoxShadow(color: Colors.black.withOpacity(.2), blurRadius: 10, spreadRadius: 5)],
                                           ),
                                         ),
-
                                         Center(child: Icon(Icons.archive, color: Colors.white)),
-                                        // IconButton(
-                                        //   icon: Icon(
-                                        //     Icons.archive,
-                                        //     size: 20,
-                                        //     color: Colors.white,
-                                        //   ),
-                                        //   onPressed: () {
-                                        //     print("CLICKED DOWNLOAD");
-                                        //     // _downloadFunc();
-                                        //     showGeneralDialog(
-                                        //       barrierLabel: "Label",
-                                        //       barrierDismissible: false,
-                                        //       barrierColor: Colors.black.withOpacity(0.2),
-                                        //       transitionDuration: Duration(milliseconds: 200),
-                                        //       context: context,
-                                        //       pageBuilder: (context, anim1, anim2) {
-                                        //         return _downloadList();
-                                        //       },
-                                        //       transitionBuilder: (context, anim1, anim2, child) {
-                                        //         return SlideTransition(
-                                        //           position: Tween(begin: Offset(0, 1), end: Offset(0, 0)).animate(anim1),
-                                        //           child: child,
-                                        //         );
-                                        //       },
-                                        //     );
-                                        //   },
-                                        // ),
                                       ],
                                     ),
                                   ),
                                 ),
-
-                                // Padding(
-                                //   padding: const EdgeInsets.only(left: 0.0, right: 0, bottom: 0, top: 0),
-                                //   child: IconButton(
-                                //     icon: Icon(
-                                //       Icons.archive,
-                                //       size: 30,
-                                //       color: Colors.white,
-                                //     ),
-                                //     onPressed: () {
-                                //       // showCupertinoModalBottomSheet(
-                                //       //   context: context,
-                                //       //   builder: (context) => _downloadlist(),
-                                //       // );
-                                //       showGeneralDialog(
-                                //         barrierLabel: "Label",
-                                //         barrierDismissible: false,
-                                //         barrierColor: Colors.black.withOpacity(0.2),
-                                //         transitionDuration: Duration(milliseconds: 200),
-                                //         context: context,
-                                //         pageBuilder: (context, anim1, anim2) {
-                                //           return _downloadList();
-                                //         },
-                                //         transitionBuilder: (context, anim1, anim2, child) {
-                                //           return SlideTransition(
-                                //             position: Tween(begin: Offset(0, 1), end: Offset(0, 0)).animate(anim1),
-                                //             child: child,
-                                //           );
-                                //         },
-                                //       );
-                                //     },
-                                //   ),
-                                // ),
                               ],
                             ),
                           ),
@@ -1127,9 +802,9 @@ class _PickDLState extends State<PickDL> {
             decoration: BoxDecoration(
               gradient: new LinearGradient(
                   colors: [
-                    Color(0xffC06C84),
-                    Color(0xff355C7D),
-                    Color(0xff6C5B7B),
+                    Theme.of(context).colorScheme.primary,
+                    Theme.of(context).colorScheme.secondary,
+                    Theme.of(context).colorScheme.primaryVariant,
                   ],
                   begin: const FractionalOffset(0.0, 0.0),
                   end: const FractionalOffset(1.0, 1.0),

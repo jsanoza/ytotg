@@ -26,24 +26,24 @@ class _ShowListState extends State<ShowList> {
   @override
   Widget build(BuildContext context) {
     return new Scaffold(
-      appBar: new AppBar(
-        backgroundColor: Color(0xff6C5B7B),
-        title: new Text(
-          'Hey!',
-          style: GoogleFonts.poppins(
-            // fontSize: 13,
-            color: Colors.white,
-            fontWeight: FontWeight.w500,
-          ),
-        ),
-      ),
+      // appBar: new AppBar(
+      //   backgroundColor: Theme.of(context).colorScheme.primary,
+      //   title: new Text(
+      //     'Hey!',
+      //     style: GoogleFonts.poppins(
+      //       // fontSize: 13,
+      //       color: Colors.white,
+      //       fontWeight: FontWeight.w500,
+      //     ),
+      //   ),
+      // ),
       body: Container(
         decoration: BoxDecoration(
           gradient: new LinearGradient(
               colors: [
-                Color(0xffC06C84),
-                Color(0xff355C7D),
-                Color(0xff6C5B7B),
+                Theme.of(context).colorScheme.primary,
+                Theme.of(context).colorScheme.secondary,
+                Theme.of(context).colorScheme.primaryVariant,
               ],
               begin: const FractionalOffset(0.0, 0.0),
               end: const FractionalOffset(1.0, 1.0),
