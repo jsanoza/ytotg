@@ -19,6 +19,7 @@ import 'package:palette_generator/palette_generator.dart';
 import 'package:path/path.dart' as path;
 import 'package:path_provider/path_provider.dart';
 import 'package:webview_flutter/webview_flutter.dart';
+import 'package:yt_otg/model/loop.dart';
 import 'package:yt_otg/trialplayeragain.dart';
 import 'downloader.dart';
 import 'dashplaylist.dart';
@@ -970,145 +971,180 @@ class _DashPlayerState extends State<DashPlayer> with TickerProviderStateMixin {
                             );
                           }),
 
-                          Padding(
-                            padding: const EdgeInsets.only(top: 0.0),
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                              children: [
-                                PlayerBuilder.isPlaying(
-                                  player: _assetsAudioPlayer,
-                                  builder: (context, isPlaying) {
-                                    return Container(
-                                      width: Get.width,
-                                      child: Padding(
-                                        padding: const EdgeInsets.only(top: 20.0),
-                                        child: Row(
-                                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                                          children: [
-                                            GestureDetector(
-                                              onTap: () {
-                                                setState(() {
-                                                  _assetsAudioPlayer.toggleShuffle();
-                                                  if (_assetsAudioPlayer.shuffle) {
-                                                    print('shuffling');
-                                                  } else {
-                                                    print('not shufflig');
-                                                  }
-                                                });
-                                              },
-                                              child: Container(
-                                                height: 30,
-                                                width: 30,
-                                                child: _assetsAudioPlayer.shuffle
-                                                    ? Icon(
-                                                        Icons.shuffle,
-                                                        size: 20,
-                                                        color: Colors.white,
-                                                      )
-                                                    : Icon(
-                                                        Icons.shuffle,
-                                                        size: 20,
-                                                        color: Colors.grey,
-                                                      ),
-                                              ),
-                                            ),
-                                            Container(
-                                              height: 50,
-                                              width: 50,
-                                              child: IconButton(
-                                                icon: Icon(
-                                                  Icons.skip_previous,
-                                                  size: 30,
-                                                  color: Colors.white,
-                                                ),
-                                                onPressed: () async {
-                                                  // setState(() {
-                                                  //   getColors();
+                          _assetsAudioPlayer.builderCurrent(builder: (context, Playing playing) {
+                            return Column(children: <Widget>[
+                              _assetsAudioPlayer.builderLoopMode(
+                                builder: (context, loopMode) {
+                                  return PlayerBuilder.isPlaying(
+                                      player: _assetsAudioPlayer,
+                                      builder: (context, isPlaying) {
+                                        return PlayingControls(
+                                          loopMode: loopMode,
+                                          isPlaying: isPlaying,
+                                          isPlaylist: true,
+                                          // onStop: () {
+                                          //   _assetsAudioPlayer.stop();
+                                          // },
+                                          toggleLoop: () {
+                                            _assetsAudioPlayer.toggleLoop();
+                                          },
+                                          onPlay: () {
+                                            _assetsAudioPlayer.playOrPause();
+                                          },
+                                          onNext: () {
+                                            //_assetsAudioPlayer.forward(Duration(seconds: 10));
+                                            _assetsAudioPlayer.next(keepLoopMode: true
+                                                /*keepLoopMode: false*/);
+                                          },
+                                          onPrevious: () {
+                                            _assetsAudioPlayer.previous(
+                                                /*keepLoopMode: false*/);
+                                          },
+                                        );
+                                      });
+                                },
+                              ),
+                            ]);
+                          }),
+                          // Padding(
+                          //   padding: const EdgeInsets.only(top: 0.0),
+                          //   child: Row(
+                          //     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                          //     children: [
+                          //       PlayerBuilder.isPlaying(
+                          //         player: _assetsAudioPlayer,
+                          //         builder: (context, isPlaying) {
+                          //           return Container(
+                          //             width: Get.width,
+                          //             child: Padding(
+                          //               padding: const EdgeInsets.only(top: 20.0),
+                          //               child: Row(
+                          //                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                          //                 children: [
+                          //                   GestureDetector(
+                          //                     onTap: () {
+                          //                       setState(() {
+                          //                         _assetsAudioPlayer.toggleShuffle();
+                          //                         if (_assetsAudioPlayer.shuffle) {
+                          //                           print('shuffling');
+                          //                         } else {
+                          //                           print('not shufflig');
+                          //                         }
+                          //                       });
+                          //                     },
+                          //                     child: Container(
+                          //                       height: 30,
+                          //                       width: 30,
+                          //                       child: _assetsAudioPlayer.shuffle
+                          //                           ? Icon(
+                          //                               Icons.shuffle,
+                          //                               size: 20,
+                          //                               color: Colors.white,
+                          //                             )
+                          //                           : Icon(
+                          //                               Icons.shuffle,
+                          //                               size: 20,
+                          //                               color: Colors.grey,
+                          //                             ),
+                          //                     ),
+                          //                   ),
+                          //                   Container(
+                          //                     height: 50,
+                          //                     width: 50,
+                          //                     child: IconButton(
+                          //                       icon: Icon(
+                          //                         Icons.skip_previous,
+                          //                         size: 30,
+                          //                         color: Colors.white,
+                          //                       ),
+                          //                       onPressed: () async {
+                          //                         // setState(() {
+                          //                         //   getColors();
 
-                                                  //   // colorFile = colorFile;
-                                                  //   // _updatePaletteGenerator(app + _assetsAudioPlayer.getCurrentAudioAlbum.toString());
-                                                  //   // colorFile = (app + _assetsAudioPlayer.getCurrentAudioAlbum.toString());
-                                                  // });
-                                                  _assetsAudioPlayer.previous().then((value) => getColors());
-                                                },
-                                              ),
-                                            ),
-                                            StreamBuilder(
-                                              stream: _assetsAudioPlayer.isPlaying,
-                                              initialData: false,
-                                              builder: (BuildContext context, AsyncSnapshot<bool> snapshot) {
-                                                return Container(
-                                                  height: 80,
-                                                  width: 80,
-                                                  child: ElevatedButton(
-                                                    style: ButtonStyle(
-                                                      backgroundColor: MaterialStateProperty.all<Color>(Colors.transparent),
-                                                      shadowColor: MaterialStateProperty.all<Color>(Colors.transparent),
-                                                      shape: MaterialStateProperty.all<RoundedRectangleBorder>(
-                                                        RoundedRectangleBorder(
-                                                          borderRadius: BorderRadius.circular(90.0),
-                                                          side: BorderSide(color: Colors.white),
-                                                        ),
-                                                      ),
-                                                    ),
-                                                    onPressed: () async {
-                                                      _assetsAudioPlayer.playOrPause();
-                                                    },
-                                                    child: snapshot.data
-                                                        ? Icon(
-                                                            Icons.pause,
-                                                            size: 40,
-                                                            color: Colors.white,
-                                                          )
-                                                        : Icon(
-                                                            Icons.play_arrow,
-                                                            size: 40,
-                                                            color: Colors.white,
-                                                          ),
-                                                  ),
-                                                );
-                                              },
-                                            ),
-                                            Container(
-                                              height: 50,
-                                              width: 50,
-                                              child: IconButton(
-                                                icon: Icon(
-                                                  Icons.skip_next,
-                                                  size: 30,
-                                                  color: Colors.white,
-                                                ),
-                                                onPressed: () async {
-                                                  _assetsAudioPlayer.next().then((value) => getColors());
-                                                  // setState(() {
-                                                  //   getColors();
-                                                  //   // _counter.value += 1;
-                                                  //   // colorFile = colorFile;
-                                                  //   // _updatePaletteGenerator(app + _assetsAudioPlayer.getCurrentAudioAlbum.toString());
-                                                  //   // _updatePaletteGenerator(app + _assetsAudioPlayer.getCurrentAudioAlbum.toString());
-                                                  //   // colorFile = (app + _assetsAudioPlayer.getCurrentAudioAlbum.toString());
-                                                  // });
-                                                },
-                                              ),
-                                            ),
-                                            GestureDetector(
-                                              onTap: () {
-                                                print('pressed');
-                                                print(_assetsAudioPlayer.currentLoopMode);
-                                                _assetsAudioPlayer.toggleLoop();
-                                                setState(() {});
-                                              },
-                                              child: loopwidget(),
-                                            ),
-                                          ],
-                                        ),
-                                      ),
-                                    );
-                                  },
-                                ),
-                              ],
-                            ),
-                          ),
+                          //                         //   // colorFile = colorFile;
+                          //                         //   // _updatePaletteGenerator(app + _assetsAudioPlayer.getCurrentAudioAlbum.toString());
+                          //                         //   // colorFile = (app + _assetsAudioPlayer.getCurrentAudioAlbum.toString());
+                          //                         // });
+                          //                         _assetsAudioPlayer.previous().then((value) => getColors());
+                          //                       },
+                          //                     ),
+                          //                   ),
+                          //                   StreamBuilder(
+                          //                     stream: _assetsAudioPlayer.isPlaying,
+                          //                     initialData: false,
+                          //                     builder: (BuildContext context, AsyncSnapshot<bool> snapshot) {
+                          //                       return Container(
+                          //                         height: 80,
+                          //                         width: 80,
+                          //                         child: ElevatedButton(
+                          //                           style: ButtonStyle(
+                          //                             backgroundColor: MaterialStateProperty.all<Color>(Colors.transparent),
+                          //                             shadowColor: MaterialStateProperty.all<Color>(Colors.transparent),
+                          //                             shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+                          //                               RoundedRectangleBorder(
+                          //                                 borderRadius: BorderRadius.circular(90.0),
+                          //                                 side: BorderSide(color: Colors.white),
+                          //                               ),
+                          //                             ),
+                          //                           ),
+                          //                           onPressed: () async {
+                          //                             _assetsAudioPlayer.playOrPause();
+                          //                           },
+                          //                           child: snapshot.data
+                          //                               ? Icon(
+                          //                                   Icons.pause,
+                          //                                   size: 40,
+                          //                                   color: Colors.white,
+                          //                                 )
+                          //                               : Icon(
+                          //                                   Icons.play_arrow,
+                          //                                   size: 40,
+                          //                                   color: Colors.white,
+                          //                                 ),
+                          //                         ),
+                          //                       );
+                          //                     },
+                          //                   ),
+                          //                   Container(
+                          //                     height: 50,
+                          //                     width: 50,
+                          //                     child: IconButton(
+                          //                       icon: Icon(
+                          //                         Icons.skip_next,
+                          //                         size: 30,
+                          //                         color: Colors.white,
+                          //                       ),
+                          //                       onPressed: () async {
+                          //                         _assetsAudioPlayer.next().then((value) => getColors());
+                          //                         // setState(() {
+                          //                         //   getColors();
+                          //                         //   // _counter.value += 1;
+                          //                         //   // colorFile = colorFile;
+                          //                         //   // _updatePaletteGenerator(app + _assetsAudioPlayer.getCurrentAudioAlbum.toString());
+                          //                         //   // _updatePaletteGenerator(app + _assetsAudioPlayer.getCurrentAudioAlbum.toString());
+                          //                         //   // colorFile = (app + _assetsAudioPlayer.getCurrentAudioAlbum.toString());
+                          //                         // });
+                          //                       },
+                          //                     ),
+                          //                   ),
+                          //                   GestureDetector(
+                          //                     onTap: () {
+                          //                       print('pressed');
+                          //                       print(_assetsAudioPlayer.currentLoopMode);
+                          //                       _assetsAudioPlayer.toggleLoop();
+                          //                       setState(() {});
+                          //                     },
+                          //                     child: loopwidget(),
+                          //                   ),
+                          //                 ],
+                          //               ),
+                          //             ),
+                          //           );
+                          //         },
+                          //       ),
+                          //     ],
+                          //   ),
+                          // ),
                           // Padding(
                           //   padding: const EdgeInsets.all(8.0),
                           //   child: FutureBuilder<PaletteGenerator>(
@@ -1167,7 +1203,7 @@ class _DashPlayerState extends State<DashPlayer> with TickerProviderStateMixin {
     currentIndex = 0;
     _controller = AnimationController(
       vsync: this,
-      duration: Duration(milliseconds: 200),
+      duration: Duration(milliseconds: 0),
     );
     // _allfunctions();
     _isLoaded = false;
@@ -1240,8 +1276,8 @@ class _DashPlayerState extends State<DashPlayer> with TickerProviderStateMixin {
                       showGeneralDialog(
                         barrierLabel: "Label",
                         barrierDismissible: false,
-                        barrierColor: Colors.black.withOpacity(0.2),
-                        transitionDuration: Duration(milliseconds: 200),
+                        barrierColor: Colors.black.withOpacity(0.0),
+                        transitionDuration: Duration(milliseconds: 150),
                         context: context,
                         pageBuilder: (context, anim1, anim2) {
                           return _expandedPlayer();
@@ -1258,8 +1294,8 @@ class _DashPlayerState extends State<DashPlayer> with TickerProviderStateMixin {
                       showGeneralDialog(
                         barrierLabel: "Label",
                         barrierDismissible: false,
-                        barrierColor: Colors.black.withOpacity(0.2),
-                        transitionDuration: Duration(milliseconds: 200),
+                        barrierColor: Colors.black.withOpacity(0.0),
+                        transitionDuration: Duration(milliseconds: 150),
                         context: context,
                         pageBuilder: (context, anim1, anim2) {
                           return _expandedPlayer();

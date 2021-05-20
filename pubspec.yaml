@@ -56,9 +56,10 @@ dependencies:
   flip_card: ^0.5.0
   image_picker: ^0.7.5
   image_cropper: ^1.4.0
-  webview_flutter: ^2.0.6
+  webview_flutter: ^2.0.4
   # easy_mask: ^1.1.5
   mask_text_input_formatter: ^1.2.1
+  syncfusion_flutter_sliders: ^19.1.64-beta
   
 
 dev_dependencies:
