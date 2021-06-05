@@ -63,11 +63,17 @@ dependencies:
   mask_text_input_formatter: ^1.2.1
   syncfusion_flutter_sliders: ^19.1.64-beta
   shared_preferences: ^2.0.5
+  flutter_launcher_icons: ^0.9.0
   
 
 dev_dependencies:
   flutter_test:
     sdk: flutter
+
+flutter_icons:
+  android: "launcher_icon"
+  ios: true
+  image_path: "assets/images/unnamed.png"
 
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec

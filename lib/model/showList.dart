@@ -1,3 +1,4 @@
+import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -52,14 +53,256 @@ class _ShowListState extends State<ShowList> {
         ),
         height: Get.height,
         width: Get.width,
-        child: Center(
-          child: Text(
-            'New features coming soon :)',
-            style: GoogleFonts.poppins(
-              // fontSize: 13,
-              color: Colors.white,
-              fontWeight: FontWeight.w500,
-            ),
+        child: Padding(
+          padding: const EdgeInsets.only(top: 58.0),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.start,
+            children: [
+              Padding(
+                padding: const EdgeInsets.only(bottom: 30.0, left: 0),
+                child: Container(
+                  // color: Colors.blue,
+                  decoration: BoxDecoration(
+                    border: Border(
+                      // top: (BorderSide(color: Colors.grey, width: 1)),
+                      bottom: (BorderSide(color: Colors.grey, width: 1)),
+                    ),
+                  ),
+                  height: 30,
+                  width: Get.width,
+                  child: Padding(
+                    padding: const EdgeInsets.only(left: 0.0),
+                  ),
+                ),
+              ),
+              AutoSizeText(
+                'New features coming soon 💯💯💯',
+                maxLines: 1,
+                maxFontSize: 14,
+                minFontSize: 14,
+                overflow: TextOverflow.ellipsis,
+                style: GoogleFonts.dmSans(
+                  fontWeight: FontWeight.w500,
+                  color: Colors.white,
+                ),
+              ),
+
+              Padding(
+                padding: const EdgeInsets.only(top: 0.0, left: 0),
+                child: Container(
+                  // color: Colors.blue,
+                  decoration: BoxDecoration(
+                    border: Border(
+                      // top: (BorderSide(color: Colors.grey, width: 1)),
+                      bottom: (BorderSide(color: Colors.grey, width: 1)),
+                    ),
+                  ),
+                  height: 30,
+                  width: Get.width,
+                  child: Padding(
+                    padding: const EdgeInsets.only(left: 0.0),
+                  ),
+                ),
+              ),
+//next line
+
+              Padding(
+                padding: const EdgeInsets.only(bottom: 30.0, left: 0),
+                child: Container(
+                  decoration: BoxDecoration(
+                    border: Border(
+                      bottom: (BorderSide(color: Colors.grey, width: 1)),
+                    ),
+                  ),
+                  height: 30,
+                  width: Get.width,
+                  child: Padding(
+                    padding: const EdgeInsets.only(left: 0.0),
+                  ),
+                ),
+              ),
+              Padding(
+                padding: const EdgeInsets.only(top: 10.0, left: 20),
+                child: Container(
+                  // color: Colors.blue,
+                  height: 30,
+                  width: Get.width,
+                  // child: Text(
+                  //   "Next update..",
+                  //   style: GoogleFonts.dmSans(
+                  //     color: Colors.white,
+                  //     fontSize: 25,
+                  //     fontWeight: FontWeight.w500,
+                  //   ),
+                  // ),
+                  child: AutoSizeText(
+                    "Next update..",
+                    maxLines: 1,
+                    maxFontSize: 25,
+                    minFontSize: 25,
+                    overflow: TextOverflow.ellipsis,
+                    style: GoogleFonts.dmSans(
+                      fontWeight: FontWeight.w500,
+                      color: Colors.white,
+                    ),
+                  ),
+                ),
+              ),
+              Padding(
+                padding: const EdgeInsets.only(top: 0.0, left: 0),
+                child: Container(
+                  // color: Colors.blue,
+                  decoration: BoxDecoration(
+                    border: Border(
+                      // top: (BorderSide(color: Colors.grey, width: 1)),
+                      bottom: (BorderSide(color: Colors.grey, width: 1)),
+                    ),
+                  ),
+                  height: 250,
+                  width: Get.width,
+                  child: Padding(
+                    padding: const EdgeInsets.only(left: 20.0),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      children: [
+                        Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            SizedBox(
+                              height: 5,
+                            ),
+                            AutoSizeText(
+                              "Lyrics.",
+                              maxLines: 1,
+                              maxFontSize: 14,
+                              minFontSize: 14,
+                              overflow: TextOverflow.ellipsis,
+                              style: GoogleFonts.dmSans(
+                                fontWeight: FontWeight.w500,
+                                color: Colors.white,
+                              ),
+                            ),
+                            SizedBox(
+                              height: 5,
+                            ),
+                            AutoSizeText(
+                              "Unknown bugs.",
+                              maxLines: 1,
+                              maxFontSize: 14,
+                              minFontSize: 14,
+                              overflow: TextOverflow.ellipsis,
+                              style: GoogleFonts.dmSans(
+                                fontWeight: FontWeight.w500,
+                                color: Colors.white,
+                              ),
+                            ),
+                            SizedBox(
+                              height: 5,
+                            ),
+                            AutoSizeText(
+                              "External Memory.",
+                              maxLines: 1,
+                              maxFontSize: 14,
+                              minFontSize: 14,
+                              overflow: TextOverflow.ellipsis,
+                              style: GoogleFonts.dmSans(
+                                fontWeight: FontWeight.w500,
+                                color: Colors.white,
+                              ),
+                            ),
+                            SizedBox(
+                              height: 5,
+                            ),
+                            AutoSizeText(
+                              "Battery consumption.",
+                              maxLines: 1,
+                              maxFontSize: 14,
+                              minFontSize: 14,
+                              overflow: TextOverflow.ellipsis,
+                              style: GoogleFonts.dmSans(
+                                fontWeight: FontWeight.w500,
+                                color: Colors.white,
+                              ),
+                            ),
+                            SizedBox(
+                              height: 5,
+                            ),
+                            AutoSizeText(
+                              "Search your own music library.",
+                              maxLines: 1,
+                              maxFontSize: 14,
+                              minFontSize: 14,
+                              overflow: TextOverflow.ellipsis,
+                              style: GoogleFonts.dmSans(
+                                fontWeight: FontWeight.w500,
+                                color: Colors.white,
+                              ),
+                            ),
+                            SizedBox(
+                              height: 5,
+                            ),
+                            AutoSizeText(
+                              """Sleep music after specified time. 
+ex: Stop music after 2 or 3 hours etc...""",
+                              maxLines: 1,
+                              maxFontSize: 14,
+                              minFontSize: 14,
+                              overflow: TextOverflow.ellipsis,
+                              style: GoogleFonts.dmSans(
+                                fontWeight: FontWeight.w500,
+                                color: Colors.white,
+                              ),
+                            ),
+                            SizedBox(
+                              height: 5,
+                            ),
+                            AutoSizeText(
+                              "Search album cover directly from the app.",
+                              maxLines: 1,
+                              maxFontSize: 14,
+                              minFontSize: 14,
+                              overflow: TextOverflow.ellipsis,
+                              style: GoogleFonts.dmSans(
+                                fontWeight: FontWeight.w500,
+                                color: Colors.white,
+                              ),
+                            ),
+                            SizedBox(
+                              height: 5,
+                            ),
+                            AutoSizeText(
+                              "Trimmer base on milliseconds instead of seconds.",
+                              maxLines: 1,
+                              maxFontSize: 14,
+                              minFontSize: 14,
+                              overflow: TextOverflow.ellipsis,
+                              style: GoogleFonts.dmSans(
+                                fontWeight: FontWeight.w500,
+                                color: Colors.white,
+                              ),
+                            ),
+                            SizedBox(
+                              height: 20,
+                            ),
+                            AutoSizeText(
+                              "Moarrrr Animations!",
+                              maxLines: 1,
+                              maxFontSize: 14,
+                              minFontSize: 14,
+                              overflow: TextOverflow.ellipsis,
+                              style: GoogleFonts.dmSans(
+                                fontWeight: FontWeight.w500,
+                                color: Colors.white,
+                              ),
+                            ),
+                          ],
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+              ),
+            ],
           ),
         ),
       ),

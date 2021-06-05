@@ -42,6 +42,7 @@ class _AllSongsState extends State<AllSongs> {
   @override
   void initState() {
     _allfunctions();
+    _myData = fetchEmployeesFromDatabase();
     print(widget.playlistName);
     // TODO: implement initState
     super.initState();

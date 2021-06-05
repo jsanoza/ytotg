@@ -67,22 +67,25 @@ class _DashPlayerState extends State<DashPlayer> with TickerProviderStateMixin {
   bool _showUpNext = false;
   bool _miniIsPlaying = false;
   NowPlaying y = Get.put(NowPlaying());
+  List<Color> lastColors = [];
 
   // ignore: missing_return
   Future<PaletteGenerator> _updatePaletteGenerator(String image) async {
     var file = File(image);
     var paletteGenerator = await PaletteGenerator.fromImageProvider(Image.file(file).image);
-    setState(() {
-      y.myListofColors.clear();
-      y.myListofColors.add(paletteGenerator.dominantColor == null ? Color(0xffC06C84) : paletteGenerator.dominantColor.color);
-      y.myListofColors.add(paletteGenerator.darkVibrantColor == null ? Color(0xff355C7D) : paletteGenerator.darkVibrantColor.color);
-      y.myListofColors.add(paletteGenerator.dominantColor == null ? Color(0xff6C5B7B) : paletteGenerator.dominantColor.color);
-    });
+    lastColors.add(y.myListofColors.elementAt(0));
+    lastColors.add(y.myListofColors.elementAt(1));
+    lastColors.add(y.myListofColors.elementAt(2));
+
+    y.myListofColors.clear();
+    y.myListofColors.add(paletteGenerator.dominantColor == null ? Color(0xffC06C84) : paletteGenerator.dominantColor.color);
+    y.myListofColors.add(paletteGenerator.darkVibrantColor == null ? Color(0xff355C7D) : paletteGenerator.darkVibrantColor.color);
+    y.myListofColors.add(paletteGenerator.dominantColor == null ? Color(0xff6C5B7B) : paletteGenerator.dominantColor.color);
+
     _miniIsPlaying = true;
   }
 
   getColors() async {
-    y.myListofColors.clear();
     await _updatePaletteGenerator(app + _assetsAudioPlayer.getCurrentAudioAlbum.toString());
     _showUpNext = !_showUpNext;
   }
@@ -552,9 +555,12 @@ class _DashPlayerState extends State<DashPlayer> with TickerProviderStateMixin {
                   decoration: BoxDecoration(
                     gradient: new LinearGradient(
                         colors: [
-                          y.myListofColors.isEmpty ? Theme.of(context).colorScheme.primary : y.myListofColors.elementAt(0),
-                          y.myListofColors.isEmpty ? Theme.of(context).colorScheme.secondary : y.myListofColors.elementAt(1),
-                          y.myListofColors.isEmpty ? Theme.of(context).colorScheme.primaryVariant : y.myListofColors.last,
+                          y.myListofColors.isEmpty ? lastColors.elementAt(0) : y.myListofColors.elementAt(0),
+                          y.myListofColors.isEmpty ? lastColors.elementAt(1) : y.myListofColors.elementAt(1),
+                          y.myListofColors.isEmpty ? lastColors.elementAt(2) : y.myListofColors.last,
+                          // y.myListofColors.elementAt(0),
+                          // y.myListofColors.elementAt(1),
+                          // y.myListofColors.last,
                         ],
                         begin: const FractionalOffset(0.0, 0.0),
                         end: const FractionalOffset(1.0, 1.0),
@@ -862,6 +868,7 @@ class _DashPlayerState extends State<DashPlayer> with TickerProviderStateMixin {
                                       },
                                       onNext: () {
                                         //_assetsAudioPlayer.forward(Duration(seconds: 10));
+
                                         _assetsAudioPlayer
                                             .next(keepLoopMode: true
                                                 /*keepLoopMode: false*/)
@@ -870,7 +877,7 @@ class _DashPlayerState extends State<DashPlayer> with TickerProviderStateMixin {
                                         });
                                       },
                                       onPrevious: () {
-                                        _assetsAudioPlayer
+                                         _assetsAudioPlayer
                                             .previous(
 
                                                 /*keepLoopMode: false*/)

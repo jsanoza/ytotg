@@ -92,6 +92,8 @@ class Splash extends StatefulWidget {
 }
 
 class _SplashState extends State<Splash> {
+
+
   go() {
     Get.offAll(() => DashPlayer());
   }
@@ -107,7 +109,15 @@ class _SplashState extends State<Splash> {
 
   @override
   Widget build(BuildContext context) {
+    Get.lazyPut<NowPlaying>(() => NowPlaying());
     NowPlaying y = Get.find<NowPlaying>();
+    y.myListofColors.add(Theme.of(context).colorScheme.primary);
+    y.myListofColors.add(Theme.of(context).colorScheme.secondary);
+    y.myListofColors.add(Theme.of(context).colorScheme.primaryVariant);
+    //    y.myListofColors.isEmpty ? Theme.of(context).colorScheme.primary : y.myListofColors.elementAt(0),
+    // y.myListofColors.isEmpty ? Theme.of(context).colorScheme.secondary : y.myListofColors.elementAt(1),
+    // y.myListofColors.isEmpty ? Theme.of(context).colorScheme.primaryVariant : y.myListofColors.last,
+
     return new Scaffold(
       body: Stack(
         children: <Widget>[

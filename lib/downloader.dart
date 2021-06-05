@@ -1,3 +1,4 @@
+// @dart=2.9
 import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
@@ -196,8 +197,20 @@ class _PickDLState extends State<PickDL> {
       var manifest = await yt.videos.streamsClient.getManifest(id);
       var audio = manifest.audioOnly.last;
       Directory appDocDir = await getApplicationDocumentsDirectory();
-      var tempTitle = '${titleList[i]}'.replaceAll(r'\', '').replaceAll('/', '').replaceAll('*', '').replaceAll('?', '').replaceAll('"', '').replaceAll('<', '').replaceAll('>', '').replaceAll('|', '').replaceAll('{', '').replaceAll('}', '').replaceAll('\'', '');
-      var tempPath = '${titleList[i]}.${audio.container.name}'.replaceAll(r'\', '').replaceAll('/', '').replaceAll('*', '').replaceAll('?', '').replaceAll('"', '').replaceAll('<', '').replaceAll('>', '').replaceAll('|', '').replaceAll('{', '').replaceAll('}', '').replaceAll('\'', '');
+      var tempTitle =
+          '${titleList[i]}'.replaceAll(r'\', '').replaceAll('/', '').replaceAll('*', '').replaceAll('?', '').replaceAll('"', '').replaceAll('<', '').replaceAll('>', '').replaceAll('|', '').replaceAll('{', '').replaceAll('}', '').replaceAll('\'', '');
+      var tempPath = '${titleList[i]}.${audio.container.name}'
+          .replaceAll(r'\', '')
+          .replaceAll('/', '')
+          .replaceAll('*', '')
+          .replaceAll('?', '')
+          .replaceAll('"', '')
+          .replaceAll('<', '')
+          .replaceAll('>', '')
+          .replaceAll('|', '')
+          .replaceAll('{', '')
+          .replaceAll('}', '')
+          .replaceAll('\'', '');
       var filePath = path.join(appDocDir.uri.toFilePath(), tempPath);
 
       print(filePath.toString());
@@ -236,7 +249,18 @@ class _PickDLState extends State<PickDL> {
           titleList[i].replaceAll(r'\', '').replaceAll('/', '').replaceAll('*', '').replaceAll('?', '').replaceAll('"', '').replaceAll('<', '').replaceAll('>', '').replaceAll('|', '').replaceAll('{', '').replaceAll('}', '').replaceAll('\'', ''),
           authorList[i].replaceAll(r'\', '').replaceAll('/', '').replaceAll('*', '').replaceAll('?', '').replaceAll('"', '').replaceAll('<', '').replaceAll('>', '').replaceAll('|', '').replaceAll('{', '').replaceAll('}', '').replaceAll('\'', ''),
           '$split.jpg',
-          '${tempTitle}1.mp4'.replaceAll(r'\', '').replaceAll('/', '').replaceAll('*', '').replaceAll('?', '').replaceAll('"', '').replaceAll('<', '').replaceAll('>', '').replaceAll('|', '').replaceAll('{', '').replaceAll('}', '').replaceAll('\'', ''),
+          '${tempTitle}1.mp4'
+              .replaceAll(r'\', '')
+              .replaceAll('/', '')
+              .replaceAll('*', '')
+              .replaceAll('?', '')
+              .replaceAll('"', '')
+              .replaceAll('<', '')
+              .replaceAll('>', '')
+              .replaceAll('|', '')
+              .replaceAll('{', '')
+              .replaceAll('}', '')
+              .replaceAll('\'', ''),
         );
         await musicDB.addItem(memo);
 
@@ -433,8 +457,10 @@ class _PickDLState extends State<PickDL> {
                                             ),
                                             child: ListTile(
                                               leading: Container(
+                                                width: 60,
                                                 padding: EdgeInsets.only(left: 8.0, top: 10),
                                                 child: CircleAvatar(
+                                                  backgroundColor: Colors.white,
                                                   backgroundImage: NetworkImage(_thumbList[index].toString()),
                                                 ),
                                               ),
@@ -535,6 +561,8 @@ class _PickDLState extends State<PickDL> {
                                     tileMode: TileMode.clamp),
                               ),
                               child: Container(
+                                height: Get.height,
+                                width: Get.width,
                                 child: ListView.builder(
                                   itemCount: titleList.length,
                                   itemBuilder: (_, index) {
@@ -589,8 +617,10 @@ class _PickDLState extends State<PickDL> {
                                               ),
                                               child: ListTile(
                                                 leading: Container(
+                                                  width: 60,
                                                   padding: EdgeInsets.only(left: 8.0, top: 10),
                                                   child: CircleAvatar(
+                                                    backgroundColor: Colors.white,
                                                     backgroundImage: NetworkImage(thumbList[index].toString()),
                                                   ),
                                                 ),

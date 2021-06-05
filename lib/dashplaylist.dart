@@ -330,7 +330,21 @@ Are you sure you want to delete this playlist?
                             size: 25,
                           ),
                           onPressed: () async {
-                            await musicDB.listTables();
+                            // await musicDB.listTables();
+                                 showDialog(
+                                                        context: context,
+                                                        builder: (context) {
+                                                          return AlertDialog(
+                                                            content: Text(
+                                                              'Soon G! 💯',
+                                                              style: GoogleFonts.dmSans(
+                                                                // fontSize: 13,
+                                                                // color: Colors.white,
+                                                                fontWeight: FontWeight.w500,
+                                                              ),
+                                                            ),
+                                                          );
+                                                        });
                           },
                         ),
                         IconButton(
@@ -1156,219 +1170,222 @@ Are you sure you want to delete this playlist?
                                             snapshot.data.forEach((element) {});
 
                                             Future<List<AddPlaylistModel>> _myCheck = (getSongsPlaylist(snapshot.data[snapshot.data.length - index - 1].playlistName.toString()));
-                                            return Container(
-                                              child: Stack(
-                                                children: [
-                                                  Padding(
-                                                    padding: const EdgeInsets.only(bottom: 0.0),
-                                                    child: Row(
-                                                      mainAxisAlignment: MainAxisAlignment.center,
-                                                      children: [
-                                                        FocusedMenuHolder(
-                                                          menuWidth: MediaQuery.of(context).size.width * 0.50,
-                                                          blurSize: 5.0,
-                                                          menuItemExtent: 45,
-                                                          menuBoxDecoration: BoxDecoration(color: Colors.grey, borderRadius: BorderRadius.all(Radius.circular(15.0))),
-                                                          duration: Duration(milliseconds: 100),
-                                                          animateMenuItems: true,
-                                                          blurBackgroundColor: Colors.black54,
-                                                          bottomOffsetHeight: 100,
-                                                          // openWithTap: true,
-                                                          menuItems: <FocusedMenuItem>[
-                                                            FocusedMenuItem(
+                                            return Padding(
+                                              padding: const EdgeInsets.all(8.0),
+                                              child: Container(
+                                                child: Stack(
+                                                  children: [
+                                                    Padding(
+                                                      padding: const EdgeInsets.only(bottom: 0.0),
+                                                      child: Row(
+                                                        mainAxisAlignment: MainAxisAlignment.center,
+                                                        children: [
+                                                          FocusedMenuHolder(
+                                                            menuWidth: MediaQuery.of(context).size.width * 0.50,
+                                                            blurSize: 5.0,
+                                                            menuItemExtent: 45,
+                                                            menuBoxDecoration: BoxDecoration(color: Colors.grey, borderRadius: BorderRadius.all(Radius.circular(15.0))),
+                                                            duration: Duration(milliseconds: 100),
+                                                            animateMenuItems: true,
+                                                            blurBackgroundColor: Colors.black54,
+                                                            bottomOffsetHeight: 100,
+                                                            // openWithTap: true,
+                                                            menuItems: <FocusedMenuItem>[
+                                                              FocusedMenuItem(
+                                                                  title: Text(
+                                                                    "Play Playlist",
+                                                                    style: TextStyle(color: Colors.black),
+                                                                  ),
+                                                                  trailingIcon: Icon(Icons.play_arrow, color: Colors.black),
+                                                                  onPressed: () async {
+                                                                    SingleAudio.fromwhere = '';
+                                                                    List<String> path = [];
+
+                                                                    audios.clear();
+                                                                    audios = [];
+
+                                                                    var resx = await dbHelper.getSongsPlaylist(snapshot.data[snapshot.data.length - index - 1].playlistName.toString());
+                                                                    resx.forEach((element) {
+                                                                      path.add(element.songspathList);
+                                                                    });
+
+                                                                    for (var filename in path) {
+                                                                      var infosx = await dbHelper.getSongsPlaylistInfo(filename);
+                                                                      for (var files in infosx) {
+                                                                        print(files.titleList.toString());
+                                                                        audios.add(Audio.file(
+                                                                          appDocDir.uri.toFilePath().toString() + files.pathList.toString(),
+                                                                          metas: Metas(
+                                                                            id: files.pathList.toString(),
+                                                                            title: files.titleList.toString(),
+                                                                            artist: files.authornameList.toString(),
+                                                                            album: files.thumbnailList.toString(),
+                                                                            image: MetasImage.asset("assets/images/aa.jpeg"),
+                                                                          ),
+                                                                        ));
+                                                                      }
+                                                                    }
+                                                                    setState(() {
+                                                                      SingleAudio.fromwhere = 'homepageplaylist';
+                                                                      widget.playlist();
+                                                                      widget.callback(audios);
+                                                                    });
+                                                                  }),
+                                                              FocusedMenuItem(
                                                                 title: Text(
-                                                                  "Play Playlist",
+                                                                  "Add / Edit Songs",
                                                                   style: TextStyle(color: Colors.black),
                                                                 ),
-                                                                trailingIcon: Icon(Icons.play_arrow, color: Colors.black),
+                                                                trailingIcon: Icon(Icons.edit_outlined, color: Colors.black),
                                                                 onPressed: () async {
-                                                                  SingleAudio.fromwhere = '';
-                                                                  List<String> path = [];
-
-                                                                  audios.clear();
-                                                                  audios = [];
-
-                                                                  var resx = await dbHelper.getSongsPlaylist(snapshot.data[snapshot.data.length - index - 1].playlistName.toString());
-                                                                  resx.forEach((element) {
-                                                                    path.add(element.songspathList);
-                                                                  });
-
-                                                                  for (var filename in path) {
-                                                                    var infosx = await dbHelper.getSongsPlaylistInfo(filename);
-                                                                    for (var files in infosx) {
-                                                                      print(files.titleList.toString());
-                                                                      audios.add(Audio.file(
-                                                                        appDocDir.uri.toFilePath().toString() + files.pathList.toString(),
-                                                                        metas: Metas(
-                                                                          id: files.pathList.toString(),
-                                                                          title: files.titleList.toString(),
-                                                                          artist: files.authornameList.toString(),
-                                                                          album: files.thumbnailList.toString(),
-                                                                          image: MetasImage.asset("assets/images/aa.jpeg"),
-                                                                        ),
-                                                                      ));
-                                                                    }
-                                                                  }
-                                                                  setState(() {
-                                                                    SingleAudio.fromwhere = 'homepageplaylist';
-                                                                    widget.playlist();
-                                                                    widget.callback(audios);
-                                                                  });
-                                                                }),
-                                                            FocusedMenuItem(
-                                                              title: Text(
-                                                                "Add / Edit Songs",
-                                                                style: TextStyle(color: Colors.black),
+                                                                  Get.to(ScreenTwo(playlistName: snapshot.data[snapshot.data.length - index - 1].playlistName.toString(), check: refresh));
+                                                                },
                                                               ),
-                                                              trailingIcon: Icon(Icons.edit_outlined, color: Colors.black),
-                                                              onPressed: () async {
-                                                                Get.to(ScreenTwo(playlistName: snapshot.data[snapshot.data.length - index - 1].playlistName.toString(), check: refresh));
-                                                              },
-                                                            ),
-                                                            FocusedMenuItem(
-                                                                title: Text(
-                                                                  "Delete",
-                                                                  style: TextStyle(color: Colors.redAccent),
-                                                                ),
-                                                                trailingIcon: Icon(
-                                                                  Icons.delete,
-                                                                  color: Colors.redAccent,
-                                                                ),
-                                                                onPressed: () {
-                                                                  showAlertDialogPlaylist(context, snapshot.data[snapshot.data.length - index - 1].playlistName.toString());
-                                                                }),
-                                                          ],
-                                                          onPressed: () async {
-                                                            SingleAudio.fromwhere = '';
-                                                            List<String> path = [];
-
-                                                            audios.clear();
-                                                            audios = [];
-
-                                                            var resx = await dbHelper.getSongsPlaylist(snapshot.data[snapshot.data.length - index - 1].playlistName.toString());
-                                                            resx.forEach((element) {
-                                                              path.add(element.songspathList);
-                                                            });
-
-                                                            for (var filename in path) {
-                                                              var infosx = await dbHelper.getSongsPlaylistInfo(filename);
-                                                              for (var files in infosx) {
-                                                                print(files.titleList.toString());
-                                                                audios.add(Audio.file(
-                                                                  appDocDir.uri.toFilePath().toString() + files.pathList.toString(),
-                                                                  metas: Metas(
-                                                                    id: files.pathList.toString(),
-                                                                    title: files.titleList.toString(),
-                                                                    artist: files.authornameList.toString(),
-                                                                    album: files.thumbnailList.toString(),
-                                                                    image: MetasImage.asset("assets/images/aa.jpeg"),
+                                                              FocusedMenuItem(
+                                                                  title: Text(
+                                                                    "Delete",
+                                                                    style: TextStyle(color: Colors.redAccent),
                                                                   ),
-                                                                ));
-                                                              }
-                                                            }
-                                                            setState(() {
-                                                              SingleAudio.fromwhere = 'homepageplaylist';
-                                                              widget.playlist();
-                                                              widget.callback(audios);
-                                                            });
-                                                          },
+                                                                  trailingIcon: Icon(
+                                                                    Icons.delete,
+                                                                    color: Colors.redAccent,
+                                                                  ),
+                                                                  onPressed: () {
+                                                                    showAlertDialogPlaylist(context, snapshot.data[snapshot.data.length - index - 1].playlistName.toString());
+                                                                  }),
+                                                            ],
+                                                            onPressed: () async {
+                                                              SingleAudio.fromwhere = '';
+                                                              List<String> path = [];
 
-                                                          child: Container(
-                                                            margin: EdgeInsets.only(left: 0, right: 0),
-                                                            width: 250,
-                                                            height: 250,
-                                                            child: Stack(
-                                                              children: [
-                                                                Padding(
-                                                                  padding: const EdgeInsets.only(bottom: 0.0),
-                                                                  child: Container(
-                                                                    width: 200,
-                                                                    height: 240,
-                                                                    child: Center(
-                                                                      child: Stack(
-                                                                        children: [
-                                                                          Container(
-                                                                            child: FutureBuilder<List<AddPlaylistModel>>(
-                                                                              future: _myCheck,
-                                                                              builder: (context, snapshotx) {
-                                                                                if (snapshotx.hasData) {
-                                                                                  return GridView.builder(
-                                                                                    gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: 2),
-                                                                                    physics: NeverScrollableScrollPhysics(),
-                                                                                    itemCount: snapshotx.data.length,
-                                                                                    itemBuilder: (BuildContext context, int index) {
-                                                                                      return Container(
-                                                                                        child: Image.file(
-                                                                                          File(
-                                                                                            appDocDir.uri.toFilePath().toString() + snapshotx.data[snapshotx.data.length - index - 1].thumbnailList.toString(),
+                                                              audios.clear();
+                                                              audios = [];
+
+                                                              var resx = await dbHelper.getSongsPlaylist(snapshot.data[snapshot.data.length - index - 1].playlistName.toString());
+                                                              resx.forEach((element) {
+                                                                path.add(element.songspathList);
+                                                              });
+
+                                                              for (var filename in path) {
+                                                                var infosx = await dbHelper.getSongsPlaylistInfo(filename);
+                                                                for (var files in infosx) {
+                                                                  print(files.titleList.toString());
+                                                                  audios.add(Audio.file(
+                                                                    appDocDir.uri.toFilePath().toString() + files.pathList.toString(),
+                                                                    metas: Metas(
+                                                                      id: files.pathList.toString(),
+                                                                      title: files.titleList.toString(),
+                                                                      artist: files.authornameList.toString(),
+                                                                      album: files.thumbnailList.toString(),
+                                                                      image: MetasImage.asset("assets/images/aa.jpeg"),
+                                                                    ),
+                                                                  ));
+                                                                }
+                                                              }
+                                                              setState(() {
+                                                                SingleAudio.fromwhere = 'homepageplaylist';
+                                                                widget.playlist();
+                                                                widget.callback(audios);
+                                                              });
+                                                            },
+
+                                                            child: Container(
+                                                              margin: EdgeInsets.only(left: 0, right: 0),
+                                                              width: 180,
+                                                              height: 260,
+                                                              child: Stack(
+                                                                children: [
+                                                                  Padding(
+                                                                    padding: const EdgeInsets.only(bottom: 0.0),
+                                                                    child: Container(
+                                                                      width: 195,
+                                                                      // height: 250,
+                                                                      child: Center(
+                                                                        child: Stack(
+                                                                          children: [
+                                                                            Container(
+                                                                              child: FutureBuilder<List<AddPlaylistModel>>(
+                                                                                future: _myCheck,
+                                                                                builder: (context, snapshotx) {
+                                                                                  if (snapshotx.hasData) {
+                                                                                    return GridView.builder(
+                                                                                      gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: 2),
+                                                                                      physics: NeverScrollableScrollPhysics(),
+                                                                                      itemCount: snapshotx.data.length,
+                                                                                      itemBuilder: (BuildContext context, int index) {
+                                                                                        return Container(
+                                                                                          child: Image.file(
+                                                                                            File(
+                                                                                              appDocDir.uri.toFilePath().toString() + snapshotx.data[snapshotx.data.length - index - 1].thumbnailList.toString(),
+                                                                                            ),
+                                                                                            fit: BoxFit.cover,
                                                                                           ),
-                                                                                          fit: BoxFit.cover,
-                                                                                        ),
-                                                                                      );
-                                                                                    },
-                                                                                  );
-                                                                                }
-                                                                                return Container();
-                                                                              },
+                                                                                        );
+                                                                                      },
+                                                                                    );
+                                                                                  }
+                                                                                  return Container();
+                                                                                },
+                                                                              ),
                                                                             ),
-                                                                          ),
-                                                                          Align(
-                                                                            alignment: Alignment.center,
-                                                                            child: Column(
-                                                                              mainAxisSize: MainAxisSize.min,
-                                                                              children: [
-                                                                                Padding(
-                                                                                  padding: const EdgeInsets.only(left: 18.0, right: 8, bottom: 28, top: 35),
-                                                                                  child: Icon(
-                                                                                    Icons.play_arrow,
-                                                                                    size: 60,
-                                                                                    color: Colors.white.withOpacity(0.2),
+                                                                            Align(
+                                                                              alignment: Alignment.center,
+                                                                              child: Column(
+                                                                                mainAxisSize: MainAxisSize.min,
+                                                                                children: [
+                                                                                  Padding(
+                                                                                    padding: const EdgeInsets.only(left: 18.0, right: 8, bottom: 28, top: 35),
+                                                                                    child: Icon(
+                                                                                      Icons.play_arrow,
+                                                                                      size: 60,
+                                                                                      color: Colors.white.withOpacity(0.2),
+                                                                                    ),
                                                                                   ),
-                                                                                ),
-                                                                              ],
+                                                                                ],
+                                                                              ),
                                                                             ),
-                                                                          ),
-                                                                          Align(
-                                                                            alignment: Alignment.bottomCenter,
-                                                                            child: Padding(
-                                                                              padding: const EdgeInsets.all(8.0),
-                                                                              child: Container(
-                                                                                color: Colors.white.withOpacity(0.2),
-                                                                                child: Column(
-                                                                                  mainAxisSize: MainAxisSize.min,
-                                                                                  children: [
-                                                                                    Padding(
-                                                                                      padding: const EdgeInsets.only(left: 8.0, right: 8, bottom: 0),
-                                                                                      child: AutoSizeText(
-                                                                                        snapshot.data[snapshot.data.length - index - 1].playlistName.toString(),
-                                                                                        maxLines: 1,
-                                                                                        maxFontSize: 14,
-                                                                                        minFontSize: 14,
-                                                                                        overflow: TextOverflow.ellipsis,
-                                                                                        style: GoogleFonts.dmSans(
-                                                                                          fontWeight: FontWeight.w500,
-                                                                                          color: Colors.white,
+                                                                            Align(
+                                                                              alignment: Alignment.bottomCenter,
+                                                                              child: Padding(
+                                                                                padding: const EdgeInsets.all(8.0),
+                                                                                child: Container(
+                                                                                  color: Colors.white.withOpacity(0.2),
+                                                                                  child: Column(
+                                                                                    mainAxisSize: MainAxisSize.min,
+                                                                                    children: [
+                                                                                      Padding(
+                                                                                        padding: const EdgeInsets.only(left: 8.0, right: 8, bottom: 0),
+                                                                                        child: AutoSizeText(
+                                                                                          snapshot.data[snapshot.data.length - index - 1].playlistName.toString(),
+                                                                                          maxLines: 1,
+                                                                                          maxFontSize: 14,
+                                                                                          minFontSize: 14,
+                                                                                          overflow: TextOverflow.ellipsis,
+                                                                                          style: GoogleFonts.dmSans(
+                                                                                            fontWeight: FontWeight.w500,
+                                                                                            color: Colors.white,
+                                                                                          ),
                                                                                         ),
                                                                                       ),
-                                                                                    ),
-                                                                                  ],
+                                                                                    ],
+                                                                                  ),
                                                                                 ),
                                                                               ),
                                                                             ),
-                                                                          ),
-                                                                        ],
+                                                                          ],
+                                                                        ),
                                                                       ),
                                                                     ),
                                                                   ),
-                                                                ),
-                                                              ],
+                                                                ],
+                                                              ),
                                                             ),
                                                           ),
-                                                        ),
-                                                      ],
+                                                        ],
+                                                      ),
                                                     ),
-                                                  ),
-                                                ],
+                                                  ],
+                                                ),
                                               ),
                                             );
                                           },
